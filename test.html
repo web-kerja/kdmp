@@ -1,0 +1,7 @@
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script>
+var c={apiKey:"AIzaSyA93AVYbEp3ocRCQEtrh0v7_9I5cpJKHiI",authDomain:"catatduit-55060.firebaseapp.com",projectId:"catatduit-55060"};
+firebase.initializeApp(c);
+firebase.auth().signInAnonymously().then(()=>{document.body.innerHTML="<h1>BERHASIL LOGIN</h1>"}).catch(e=>{document.body.innerHTML="<h1>GAGAL: "+e.message+"</h1>"});
+</script>

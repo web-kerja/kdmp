@@ -103,7 +103,18 @@ auth.onAuthStateChanged(function(u){if(!u){auth.signInAnonymously();return}uid=u
 function roomRef(){return db.collection('rooms').doc(room)}function txRef(){return roomRef().collection('tx')}
 function sync(){if(!uid)return;setSync(true,'Sync...');txRef().orderBy('t','desc').limit(100).onSnapshot(function(s){txs=[];s.forEach(function(d){txs.push({id:d.id,...d.data()})});render();setSync(true,'Sudah Sync ✓');localStorage.setItem('oldTx',JSON.stringify(txs))},function(){setSync(false,'Belum Sync - Offline')});
 roomRef().collection('wallets').onSnapshot(function(s){wallets=[];s.forEach(function(d){wallets.push({id:d.id,...d.data()})});renderW()});
-roomRef().collection('cats').onSnapshot(function(s){cats=[];s.forEach(function(d){cats.push({id:d.id,...d.data()})});if(cats.length==0){['Makan','Transport','Jajan','Belanja'].forEach(function(c){roomRef().collection('cats').add({name:c,type:'keluar'})});['Gaji','Jualan','Bonus'].forEach(function(c){roomRef().collection('cats').add({name:c,type:'masuk'})})}renderCats()});
+// FIX CATS - JANGAN SEEDING DI DALAM onSnapshot, BIKIN MACET
+var catsSeeded = localStorage.getItem('catsSeeded');
+roomRef().collection('cats').onSnapshot(function(s){
+  if(s.empty && !catsSeeded){
+    localStorage.setItem('catsSeeded','1');
+    ['Makan','Transport','Jajan','Belanja'].forEach(function(c){roomRef().collection('cats').add({name:c,type:'keluar'})});
+    ['Gaji','Jualan','Bonus'].forEach(function(c){roomRef().collection('cats').add({name:c,type:'masuk'})});
+    return;
+  }
+  cats=[];s.forEach(function(d){cats.push({id:d.id,...d.data()})});
+  try{renderCats()}catch(e){}
+});
 roomRef().collection('hutang').onSnapshot(function(s){hutangs=[];s.forEach(function(d){hutangs.push({id:d.id,...d.data()})});renderHutang()});
 roomRef().collection('tagihan').onSnapshot(function(s){tagihans=[];s.forEach(function(d){tagihans.push({id:d.id,...d.data()})});renderTagihan()});
 roomRef().collection('budget').onSnapshot(function(s){budgets=[];s.forEach(function(d){budgets.push({id:d.id,...d.data()})});renderBudget()});
@@ -111,8 +122,26 @@ roomRef().collection('nabung').onSnapshot(function(s){nabungs=[];s.forEach(funct
 roomRef().collection('bagi').onSnapshot(function(s){bagiSaved=[];s.forEach(function(d){bagiSaved.push({id:d.id,...d.data()})});renderBagiSaved()});
 $('roomId').innerText=room.slice(-6);$('roomId2').innerText=room;$('accName').innerText='👤 '+(accs.find(function(a){return a.id==room})?.name||'Akun Saya');
 }
-function switchTab(n){document.querySelectorAll('.tab').forEach(function(e){e.classList.remove('active')});document.querySelectorAll('nav button').forEach(function(e){e.classList.remove('active')});$('tab'+n).classList.add('active');if($('nav'+n))$('nav'+n).classList.add('active');if(n=='Analisis')renderAnalisis();if(n=='Setting')renderAcc();if(n=='Konsul')renderKonsul();}
-function render(){var bal=0,mas=0,kel=0;txs.forEach(function(t){var a=Number(t.amount||0);if(t.type=='masuk'){bal+=a;mas+=a}else if(t.type=='keluar'||t.type=='hutang'||t.type=='tagihan'||t.type=='nabung'){bal-=a;kel+=a}});$('saldo').innerText=fmt(bal);$('masuk').innerText='Masuk '+fmt(mas);$('keluar').innerText='Keluar '+fmt(kel);var h='';if(txs.length==0){$('empty').style.display='block'}else{$('empty').style.display='none';txs.forEach(function(t){h+='<div class="tx" onclick="editTx(\''+t.id+'\')"><div><b>'+t.cat+'</b><div style="font-size:11px;opacity:.6">'+(t.wallet||'')+' • '+(t.link?('→ '+t.link+' • '):'')+(new Date(t.t||Date.now()).toLocaleDateString('id-ID'))+'</div></div><div style="color:'+(t.type=='masuk'?'#16a34a':'#dc2626')+'">'+(t.type=='masuk'?'+':'-')+fmt(t.amount)+'</div></div>'})}$('list').innerHTML=h;renderW();renderKonsul();renderAnalisis();}
+function switchTab(n){
+  try{
+    document.querySelectorAll('.tab').forEach(function(e){e.classList.remove('active')});
+    document.querySelectorAll('nav button').forEach(function(e){e.classList.remove('active')});
+    var t=$('tab'+n); if(t) t.classList.add('active');
+    var nb=$('nav'+n); if(nb) nb.classList.add('active');
+    if(n=='Analisis') renderAnalisis();
+    if(n=='Setting') renderAcc();
+    if(n=='Konsul') renderKonsul();
+  }catch(e){console.log(e)}
+}
+function render(){
+  try{
+    var bal=0,mas=0,kel=0;
+    txs.forEach(function(t){var a=Number(t.amount||0);if(t.type=='masuk'){bal+=a;mas+=a}else if(t.type!='pindah'){bal-=a;kel+=a}});
+    $('saldo').innerText=fmt(bal);$('masuk').innerText='Masuk '+fmt(mas);$('keluar').innerText='Keluar '+fmt(kel);
+    var h='';if(txs.length==0){$('empty').style.display='block'}else{$('empty').style.display='none';txs.forEach(function(t){h+='<div class="tx" onclick="editTx(\''+t.id+'\')"><div><b>'+t.cat+'</b><div style="font-size:11px;opacity:.6">'+(t.wallet||'')+' • '+(new Date(t.t||Date.now()).toLocaleDateString('id-ID'))+'</div></div><div style="color:'+(t.type=='masuk'?'#16a34a':'#dc2626')+'">'+(t.type=='masuk'?'+':'-')+fmt(t.amount)+'</div></div>'})}
+    $('list').innerHTML=h;renderW();renderKonsul();
+  }catch(e){console.log('render error',e)}
+}
 function renderW(){var h='';wallets.forEach(function(w){var tot=0;txs.forEach(function(t){if(t.wallet==w.name){tot+=t.type=='masuk'?Number(t.amount):-Number(t.amount)}if(t.wallet2==w.name&&t.type=='pindah')tot+=Number(t.amount)});h+='<div class="w" onclick="renameW(\''+w.name+'\')"><b>'+w.name+'</b><br><span style="font-size:11px">'+fmt(tot)+'</span></div>'});$('walletList').innerHTML=h||'<span style="font-size:11px">Belum ada dompet</span>';var o='';wallets.forEach(function(w){o+='<option value="'+w.name+'">'+w.name+'</option>'});o+='<option value="__new">+ Dompet Baru</option>';$('fWallet').innerHTML=o;$('fWallet2').innerHTML=o;var l='<option value="">- Tanpa Link -</option>';nabungs.forEach(function(n){l+='<option value="nabung:'+n.id+'">🎯 Nabung: '+n.name+'</option>'});hutangs.forEach(function(x){l+='<option value="hutang:'+x.id+'">💸 Hutang: '+x.name+'</option>'});tagihans.forEach(function(t){l+='<option value="tagihan:'+t.id+'">🧾 Tagihan: '+t.name+'</option>'});$('fLink').innerHTML=l;}
 function setCatMode(m){catMode=m;renderCats()}function renderCats(){var h='';cats.filter(function(c){return c.type==catMode}).forEach(function(c){h+='<span class="chip" onclick="editCat(\''+c.id+'\')">'+c.name+' ✏️</span>'});$('catList').innerHTML=h||'Belum ada kategori';var o='';cats.filter(function(c){return c.type==catMode}).forEach(function(c){o+='<option value="'+c.name+'">'+c.name+'</option>'});if($('fType').value=='keluar'||$('fType').value=='masuk')$('fCat').innerHTML=o;}
 function addCat(){var n=prompt('Nama kategori baru ('+catMode+'):');if(!n)return;roomRef().collection('cats').add({name:n,type:catMode})}

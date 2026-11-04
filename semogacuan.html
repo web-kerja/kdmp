@@ -96,10 +96,13 @@ var firebaseConfig={apiKey:"AIzaSyA93AVYbEp3ocRCQEtrh0v7_9I5cpJKHiI",authDomain:
 firebase.initializeApp(firebaseConfig);var auth=firebase.auth(),db=firebase.firestore();
 var uid=null,room=null,txs=[],wallets=[],hutangs=[],tagihans=[],budgets=[],nabungs=[],cats=[],bagiSaved=[],editingId=null,catMode='keluar',anMode='bulan',accs=JSON.parse(localStorage.getItem('accs')||'[]'),curAcc=localStorage.getItem('curAcc')||'';
 function saveAccs(){localStorage.setItem('accs',JSON.stringify(accs));localStorage.setItem('curAcc',curAcc)}
-if(accs.length==0){var id='room_'+Date.now();accs=[{id:id,name:'Akun Saya'}];curAcc=id;saveAccs()}room=curAcc;
+if(accs.length==0){var id='room_'+Date.now();accs=[{id:id,name:'Akun Saya'}];curAcc=id;saveAccs()}
+if(!curAcc || !accs.find(function(a){return a.id==curAcc})){curAcc=accs[0].id;saveAccs()}
+room=curAcc;
 function $(id){return document.getElementById(id)}function fmt(n){return 'Rp '+(n||0).toLocaleString('id-ID')}
 function setSync(ok,txt){$('syncDot').className='dot '+(ok?'on':'off');$('syncTxt').innerText=txt||(ok?'Sudah Sync ✓':'Belum Sync');$('fbStat').innerText=txt||''}
 auth.onAuthStateChanged(function(u){if(!u){auth.signInAnonymously();return}uid=u.uid;setSync(true,'Sudah Sync Firebase ✓');sync()});auth.signInAnonymously();
+setTimeout(function(){if(!uid){setSync(false,'Belum Sync - Mode Lokal, tetap bisa klik');try{render()}catch(e){}}},5000);
 function roomRef(){return db.collection('rooms').doc(room)}function txRef(){return roomRef().collection('tx')}
 function sync(){if(!uid)return;setSync(true,'Sync...');txRef().orderBy('t','desc').limit(100).onSnapshot(function(s){txs=[];s.forEach(function(d){txs.push({id:d.id,...d.data()})});render();setSync(true,'Sudah Sync ✓');localStorage.setItem('oldTx',JSON.stringify(txs))},function(){setSync(false,'Belum Sync - Offline')});
 roomRef().collection('wallets').onSnapshot(function(s){wallets=[];s.forEach(function(d){wallets.push({id:d.id,...d.data()})});renderW()});

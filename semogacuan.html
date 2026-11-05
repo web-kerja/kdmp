@@ -158,9 +158,9 @@ function txRef(){return roomRef().collection('tx')}
 function syncFirebase(){
   if(!uid||!db) return;
   dbg('sync mulai uid='+uid.slice(0,6)+' room='+room);
-  try{txRef().orderBy('t','desc').limit(100).onSnapshot(function(s){var arr=[];s.forEach(function(d){arr.push({id:d.id,...d.data()})});if(arr.length>0||txs.length==0){txs=arr;localStorage.setItem('oldTx',JSON.stringify(txs));render()}setSync(true,'Sudah Sync ✓');dbg('sync OK tx='+arr.length)},function(err){setSync(false,'Belum Sync: '+err.message);dbg('sync tx err '+err.message)})}catch(e){dbg('sync tx '+e.message)}
-  try{roomRef().collection('wallets').onSnapshot(function(s){if(!s.empty){wallets=[];s.forEach(function(d){wallets.push({id:d.id,...d.data()})});localStorage.setItem('localWallets',JSON.stringify(wallets));renderW()}})}catch(e){}
-  try{roomRef().collection('cats').onSnapshot(function(s){if(!s.empty){cats=[];s.forEach(function(d){cats.push({id:d.id,...d.data()})});localStorage.setItem('localCats',JSON.stringify(cats));renderCats()}})}catch(e){}
+  try{txRef().orderBy('t','desc').limit(100).onSnapshot(function(s){var arr=[];s.forEach(function(d){arr.push({id:d.id,...d.data()})});{txs=arr;localStorage.setItem('oldTx',JSON.stringify(txs));render()}setSync(true,'Sudah Sync ✓');dbg('sync OK tx='+arr.length)},function(err){setSync(false,'Belum Sync: '+err.message);dbg('sync tx err '+err.message)})}catch(e){dbg('sync tx '+e.message)}
+  try{roomRef().collection('wallets').onSnapshot(function(s){wallets=[];s.forEach(function(d){wallets.push({id:d.id,...d.data()})});localStorage.setItem('localWallets',JSON.stringify(wallets));renderW()}})}catch(e){}
+  try{roomRef().collection('cats').onSnapshot(function(s){cats=[];s.forEach(function(d){cats.push({id:d.id,...d.data()})});localStorage.setItem('localCats',JSON.stringify(cats));renderCats()}})}catch(e){}
   try{roomRef().collection('hutang').onSnapshot(function(s){hutangs=[];s.forEach(function(d){hutangs.push({id:d.id,...d.data()})});localStorage.setItem('localHutang',JSON.stringify(hutangs));renderHutang()})}catch(e){}
   try{roomRef().collection('tagihan').onSnapshot(function(s){tagihans=[];s.forEach(function(d){tagihans.push({id:d.id,...d.data()})});localStorage.setItem('localTagihan',JSON.stringify(tagihans));renderTagihan()})}catch(e){}
   try{roomRef().collection('budget').onSnapshot(function(s){budgets=[];s.forEach(function(d){budgets.push({id:d.id,...d.data()})});localStorage.setItem('localBudget',JSON.stringify(budgets));renderBudget()})}catch(e){}

@@ -1,181 +1,122 @@
 <!DOCTYPE html>
-<html lang="id"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CatatDuit MERAH FIX PINDAH</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui}
-body{background:#fff7ed;padding-bottom:20px}
-header{position:sticky;top:0;z-index:30;background:linear-gradient(135deg,#991b1b,#dc2626,#ef4444);color:#fff;padding:14px}
-.sync{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.18);padding:6px 10px;border-radius:20px;font-weight:700;font-size:12px}
-.dot{width:9px;height:9px;border-radius:50%;background:#facc15}.dot.on{background:#4ade80}.dot.off{background:#f87171}
-nav{position:sticky;top:0;z-index:29;background:#fff;display:flex;overflow-x:auto;gap:6px;padding:8px;border-bottom:2px solid #fee2e2}
-nav button{flex:0 0 84px;min-width:84px;border:1px solid #fee2e2;background:#fff7ed;border-radius:14px;padding:10px 4px;font-size:12px;font-weight:700;cursor:pointer}
-nav button span{font-size:22px;display:block}
-nav button.active{background:#dc2626;color:#fff}
-.card{background:#fff;margin:10px;border-radius:16px;padding:12px;border:1px solid #fee2e2}
-.inp{width:100%;padding:11px;border:1px solid #fecaca;border-radius:10px;margin:5px 0}
-.btn{padding:11px;border:0;border-radius:10px;font-weight:700}.btnP{background:#dc2626;color:#fff}.btnG{background:#fee2e2;color:#991b1b}
-.tx{padding:10px 0;border-bottom:1px solid #fef3c7;display:flex;justify-content:space-between;cursor:pointer}
-.tab{display:none}.tab.active{display:block}
-.fab{position:fixed;right:16px;bottom:18px;width:62px;height:62px;border-radius:50%;background:#dc2626;color:#fff;font-size:32px;border:0;z-index:40}
-.prog{height:10px;background:#fee2e2;border-radius:10px;overflow:hidden;margin:6px 0}.prog div{height:100%;background:#dc2626}
-.chip{display:inline-block;padding:5px 10px;border-radius:20px;background:#fee2e2;font-size:11px;margin:2px;cursor:pointer}
-.wList{display:flex;gap:8px;overflow:auto}.w{border:1px solid #fecaca;padding:10px 12px;border-radius:12px;min-width:118px;cursor:pointer;background:#fff7ed}
-</style></head><body>
-<header>
-<div style="display:flex;justify-content:space-between;align-items:center"><span id="accName" style="background:rgba(255,255,255,.2);padding:6px 12px;border-radius:20px;font-weight:800;font-size:12px">👤 Akun</span><span class="sync"><span id="syncDot" class="dot"></span><span id="syncTxt">Siap - Mode Lokal</span></span></div>
-<div style="font-size:32px;font-weight:900;margin-top:10px" id="saldo">Rp 0</div>
-<div style="font-size:12px;display:flex;gap:12px"><span id="masuk">Masuk 0</span><span id="keluar">Keluar 0</span><span id="roomId">-</span></div>
-<div id="debug" style="font-size:10px;background:rgba(0,0,0,.25);padding:6px;border-radius:8px;margin-top:8px;word-break:break-all">DEBUG: mulai...</div>
-</header>
-<nav>
-<button id="navKeuangan" class="active" onclick="switchTab('Keuangan')"><span>💰</span>Keuangan</button>
-<button id="navHutang" onclick="switchTab('Hutang')"><span>💸</span>Hutang</button>
-<button id="navTagihan" onclick="switchTab('Tagihan')"><span>🧾</span>Tagihan</button>
-<button id="navBudget" onclick="switchTab('Budget')"><span>📊</span>Budget</button>
-<button id="navNabung" onclick="switchTab('Nabung')"><span>🎯</span>Nabung</button>
-<button id="navAnalisis" onclick="switchTab('Analisis')"><span>📈</span>Analisis</button>
-<button id="navKonsul" onclick="switchTab('Konsul')"><span>💡</span>Bagi Gaji</button>
-<button id="navTanya" onclick="switchTab('Tanya')"><span>🛒</span>Tanya Beli</button>
-<button id="navSetting" onclick="switchTab('Setting')"><span>⚙️</span>Setting</button>
-</nav>
-<div id="tabKeuangan" class="tab active">
-<div class="card"><div style="display:flex;justify-content:space-between"><b>💳 Dompet</b><span><span style="color:#dc2626;font-weight:800;cursor:pointer" onclick="pindahDompet()">🔄 Pindah</span> &nbsp; <span style="color:#dc2626;font-weight:800;cursor:pointer" onclick="addWallet()">+ Tambah</span></span></div><div class="wList" id="walletList" style="margin-top:8px"></div><div style="margin-top:8px"><button class="btn btnG" style="font-size:11px;padding:7px 10px" onclick="auditSelisih()">🔍 Cek Kenapa Selisih</button><div id="auditBox" style="font-size:11px;margin-top:6px;white-space:pre-wrap"></div></div></div>
-<div class="card"><b>🏷️ Kategori</b><div style="margin-top:6px"><button class="btn btnG" onclick="setCatMode('keluar')">Pengeluaran</button> <button class="btn btnG" onclick="setCatMode('masuk')">Pemasukan</button> <button class="btn btnP" onclick="addCat()">+ Kategori</button></div><div id="catList" style="margin-top:6px"></div></div>
-<div class="card"><b>📋 Transaksi 100 Terakhir</b><div id="list"></div><div id="empty" style="text-align:center;padding:14px">Belum ada transaksi</div></div>
+*{box-sizing:border-box} body{margin:0;font-family:Arial,sans-serif;background:#f5f5f5;color:#222}
+.top{background:#e53935;color:#fff;padding:12px 14px;display:flex;justify-content:space-between;align-items:center}
+.top b{font-size:20px} .top span{font-size:12px;background:#fff;color:#e53935;padding:4px 8px;border-radius:20px}
+.wrap{padding:12px;max-width:480px;margin:auto}
+.card{background:#fff;border-radius:14px;padding:14px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.saldo-label{font-size:13px;color:#666} .saldo{font-size:32px;font-weight:800;margin:4px 0}
+.row{display:flex;gap:8px;flex-wrap:wrap} button{border:0;border-radius:10px;padding:10px 12px;font-weight:700;cursor:pointer}
+.btn-red{background:#e53935;color:#fff;flex:1} .btn-white{background:#eee;flex:1} .btn-green{background:#2e7d32;color:#fff;width:100%}
+input,select{width:100%;padding:11px;border:1px solid #ddd;border-radius:10px;margin:6px 0;font-size:15px}
+label{font-size:12px;color:#666;font-weight:700}
+#debug{background:#111;color:#0f0;padding:10px;border-radius:10px;font-size:12px;white-space:pre-wrap;min-height:40px}
+.bottom{position:fixed;left:0;right:0;bottom:0;background:#fff;display:flex;border-top:1px solid #ddd;max-width:480px;margin:auto}
+.bottom button{flex:1;background:#fff;border-radius:0;padding:12px 0}
+.bottom .active{color:#e53935;border-top:3px solid #e53935}
+table{width:100%;font-size:13px;border-collapse:collapse} td,th{padding:8px;border-bottom:1px solid #eee;text-align:left}
+</style>
+</head>
+<body>
+<div class="top"><b>CatatDuit</b><span id="statusTop">Siap - Mode Lokal</span></div>
+<div class="wrap" style="padding-bottom:80px">
+  <div class="card">
+    <div class="saldo-label">Saldo Saat Ini</div>
+    <div class="saldo" id="saldoText">Rp 0</div>
+    <div class="row">
+      <button class="btn-red" onclick="setMode('keluar')">Keluar</button>
+      <button class="btn-white" onclick="setMode('masuk')">Masuk</button>
+    </div>
+    <div class="row" style="margin-top:8px">
+      <button class="btn-white" onclick="alert('Akun: KDMP Bobotsari')">Akun</button>
+      <button class="btn-white" onclick="alert('Transfer antar akun')">Transfer</button>
+      <button class="btn-white" onclick="showRincian()">Rincian</button>
+      <button class="btn-white" onclick="showSaldo()">Saldo</button>
+    </div>
+  </div>
+  <div class="card">
+    <label>Tanggal</label>
+    <input type="date" id="tgl">
+    <label>Kategori</label>
+    <select id="kategori"><option>Penjualan</option><option>Belanja</option><option>Gaji</option><option>Operasional</option><option>Lainnya</option></select>
+    <label>Jumlah (Rp)</label>
+    <input type="number" id="jumlah" placeholder="0">
+    <label>Keterangan</label>
+    <input type="text" id="ket" placeholder="Contoh: Jual beras...">
+    <button class="btn-green" onclick="simpan()">+ SIMPAN TRANSAKSI</button>
+  </div>
+  <div class="card"><b>Transaksi Terakhir</b><div id="list"></div></div>
+  <div class="card"><b>DEBUG</b><div id="debug">mulai...</div></div>
 </div>
-<div id="tabHutang" class="tab"><div class="card"><b>💸 Hutang</b><div style="display:flex;gap:6px;margin-top:6px"><button class="btn btnP" onclick="addHutang('bank')">+ Bank</button><button class="btn btnG" onclick="addHutang('teman')">+ Teman / Sodara</button></div><div id="hutangList"></div></div></div>
-<div id="tabTagihan" class="tab"><div class="card"><b>🧾 Tagihan</b><button class="btn btnP" style="float:right" onclick="addTagihan()">+ Tambah</button><div style="clear:both;font-size:11px;opacity:.6">Atas=Terlewat • Tengah=Belum • Bawah=Terbayar</div><div id="tagihanList"></div></div></div>
-<div id="tabBudget" class="tab"><div class="card"><b>📊 Budget</b><div id="budgetList"></div><div style="display:flex;gap:6px"><input id="bCat" class="inp" placeholder="Nama Budget" style="flex:1"><input id="bAmt" class="inp" type="number" placeholder="Limit" style="flex:1"><button class="btn btnP" onclick="saveBudget()">+</button></div><div id="aiBudget" style="font-size:12px;margin-top:6px"></div></div></div>
-<div id="tabNabung" class="tab"><div class="card"><b>🎯 Nabung</b><button class="btn btnP" style="float:right" onclick="addNabung()">+ Target</button><div style="clear:both"></div><div id="nabungList"></div></div></div>
-<div id="tabAnalisis" class="tab"><div class="card"><b>📈 Analisis</b><div style="display:flex;gap:6px;margin:6px 0"><button class="btn btnG" onclick="setAn('bulan')">Bulan Ini</button><button class="btn btnG" onclick="setAn('all')">All Time</button></div><canvas id="chart" width="320" height="120" style="background:#fff7ed;border-radius:10px;width:100%"></canvas><div id="analisisList"></div></div></div>
-<div id="tabKonsul" class="tab"><div class="card"><b>💰 Bagi Gaji + AI Konsul</b><input id="gajiIn" class="inp" type="number" placeholder="Gaji: 5000000"><input id="gajiKet" class="inp" placeholder="Keterangan: Gajian tgl 25"><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px"><div>Jajan%<input id="pJajan" class="inp" type="number" value="20"></div><div>Nabung%<input id="pNabung" class="inp" type="number" value="30"></div><div>Hutang%<input id="pHutang" class="inp" type="number" value="20"></div><div>Tagihan%<input id="pTagih" class="inp" type="number" value="20"></div><div>Darurat%<input id="pDar" class="inp" type="number" value="10"></div></div><button class="btn btnP" style="width:100%" onclick="bagiGaji()">🔥 Bagi & Konsul AI</button><div id="bagiHasil" style="margin-top:8px;font-size:12px"></div><button class="btn btnG" style="width:100%;margin-top:6px" onclick="saveBagi()">💾 Simpan</button><div id="bagiSaved" style="font-size:12px;margin-top:6px"></div><div style="background:#fef3c7;padding:8px;border-radius:10px;margin-top:8px;font-size:12px"><b>🤖 AI Konsul</b><div id="konsulBox">-</div></div></div></div>
-<div id="tabTanya" class="tab"><div class="card"><b>🛒 Tanya Beli Level 1-5</b><input id="tanyaQ" class="inp" placeholder="Mau beli apa?"><input id="tanyaHarga" class="inp" type="number" placeholder="Harga"><input id="tanyaAlasan" class="inp" placeholder="Alasan"><select id="tanyaL" class="inp"><option value="1">1 Butuh Banget</option><option value="2">2 Butuh</option><option value="3">3 Lumayan</option><option value="4">4 Pengen</option><option value="5">5 Nafsu</option></select><button class="btn btnP" style="width:100%" onclick="cekTanya()">Cek Boleh?</button><div id="tanyaAns" style="font-size:12px;margin-top:6px"></div></div></div>
-<div id="tabSetting" class="tab"><div class="card"><b>👥 Akun / Kamar</b><div id="accList"></div><div style="display:flex;gap:6px"><input id="newAcc" class="inp" placeholder="Nama baru: Warung" style="flex:1"><button class="btn btnP" onclick="createAcc()">+</button></div></div><div class="card"><b>🔗 Hubungkan Perangkat</b><div style="display:flex;gap:6px"><button class="btn btnG" style="flex:1" onclick="showCode()">Tampilkan Kode</button><button class="btn btnP" style="flex:1" onclick="enterCode()">Masukkan Kode</button></div><div id="codeBox" style="display:none;text-align:center;background:#fff7ed;padding:12px;border-radius:10px;margin-top:8px"><div id="myCode" style="font-size:26px;font-weight:900">------</div></div><div id="enterBox" style="display:none;margin-top:8px"><input id="inCode" class="inp" placeholder="123456" style="text-align:center;font-size:18px"><button class="btn btnP" style="width:100%" onclick="doConnect()">Hubungkan</button></div></div><div class="card"><b>💾 Data</b><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn btnG" onclick="exportJSON()">Export JSON</button><button class="btn btnG" onclick="window.print()">🖨️ Print</button><button class="btn btnG" onclick="localStorage.clear();location.reload()">Reset Local</button></div><div style="font-size:11px;margin-top:8px">ID: <span id="roomId2">-</span> • <span id="fbStat">-</span></div></div></div>
-<button class="fab" onclick="openForm()">+</button>
-<div id="mForm" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:50;align-items:end"><div style="background:#fff;width:100%;border-radius:18px 18px 0 0;padding:14px"><h3 id="fTitle">Tambah</h3><select id="fCat" class="inp"></select><input id="fAmt" class="inp" type="number" placeholder="Jumlah"><select id="fWallet" class="inp"></select><select id="fType" class="inp" onchange="onType()"><option value="keluar">Keluar</option><option value="masuk">Masuk</option><option value="pindah">Pindah Dompet</option><option value="nabung">Nabung (link Target)</option><option value="hutang">Bayar Hutang (link)</option><option value="tagihan">Bayar Tagihan (link)</option></select><select id="fWallet2" class="inp" style="display:none"></select><select id="fLink" class="inp" style="display:none"></select><div style="display:flex;gap:6px"><button class="btn btnP" style="flex:1" onclick="saveTx()">Simpan</button><button class="btn btnG" style="flex:1" onclick="closeForm()">Batal</button></div><div id="fAct" style="display:none;margin-top:6px"><button class="btn" style="width:100%;background:#fee2e2;color:#dc2626" onclick="delTx()">Hapus (Hutang/Tagihan balik)</button></div></div></div>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<div class="bottom">
+  <button class="active">Catat</button><button onclick="alert('Menu Akun')">Akun</button><button onclick="showRincian()">Laporan</button><button onclick="alert('Pengaturan')">Pengaturan</button>
+</div>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 <script>
-function $(id){return document.getElementById(id)}
-function dbg(m){try{$('debug').innerText='DEBUG: '+m}catch(e){} console.log(m)}
-function fmt(n){return 'Rp '+(n||0).toLocaleString('id-ID')}
-function setSync(ok,txt){try{$('syncDot').className='dot '+(ok?'on':'off');$('syncTxt').innerText=txt;$('fbStat').innerText=txt}catch(e){}}
-var accs=[];try{accs=JSON.parse(localStorage.getItem('accs')||'[]')}catch(e){accs=[]}
-var curAcc=localStorage.getItem('curAcc')||'';
-if(accs.length==0){var nid='room_'+Date.now();accs=[{id:nid,name:'Akun Saya'}];curAcc=nid}
-if(!curAcc||!accs.find(function(a){return a.id==curAcc})){curAcc=accs[0].id}
-function saveAccs(){localStorage.setItem('accs',JSON.stringify(accs));localStorage.setItem('curAcc',curAcc)}
-saveAccs();
-var room=curAcc;
-var txs=[],wallets=[],hutangs=[],tagihans=[],budgets=[],nabungs=[],cats=[],bagiSaved=[],editingId=null,catMode='keluar',anMode='bulan',uid=null;
-try{txs=JSON.parse(localStorage.getItem('oldTx')||'[]')}catch(e){}
-try{wallets=JSON.parse(localStorage.getItem('localWallets')||'[]')}catch(e){}
-try{hutangs=JSON.parse(localStorage.getItem('localHutang')||'[]')}catch(e){}
-try{tagihans=JSON.parse(localStorage.getItem('localTagihan')||'[]')}catch(e){}
-try{budgets=JSON.parse(localStorage.getItem('localBudget')||'[]')}catch(e){}
-try{nabungs=JSON.parse(localStorage.getItem('localNabung')||'[]')}catch(e){}
-try{cats=JSON.parse(localStorage.getItem('localCats')||'[]')}catch(e){}
-if(cats.length==0) cats=[{name:'Makan',type:'keluar'},{name:'Transport',type:'keluar'},{name:'Jajan',type:'keluar'},{name:'Gaji',type:'masuk'},{name:'Jualan',type:'masuk'}];
-if(wallets.length==0) wallets=[{name:'Cash'}];
-dbg('room='+room+' accs='+accs.length+' tx lokal='+txs.length);
-function switchTab(n){try{document.querySelectorAll('.tab').forEach(function(e){e.classList.remove('active')});document.querySelectorAll('nav button').forEach(function(e){e.classList.remove('active')});var t=$('tab'+n);if(t)t.classList.add('active');var nb=$('nav'+n);if(nb)nb.classList.add('active');if(n=='Analisis')renderAnalisis();if(n=='Setting')renderAcc();if(n=='Konsul')renderKonsul();}catch(e){dbg('switchTab err '+e.message)}}
-// FIX 1: render() - pindah TIDAK dihitung keluar
-function render(){try{var bal=0,mas=0,kel=0;txs.forEach(function(t){var a=Number(t.amount||0);if(t.type=='masuk'){bal+=a;mas+=a}else if(t.type!='pindah'){bal-=a;kel+=a}});$('saldo').innerText=fmt(bal);$('masuk').innerText='Masuk '+fmt(mas);$('keluar').innerText='Keluar '+fmt(kel);$('roomId').innerText=room.slice(-6);$('roomId2').innerText=room;$('accName').innerText='👤 '+(accs.find(function(a){return a.id==room})?.name||'Akun Saya');var h='';if(txs.length==0){$('empty').style.display='block'}else{$('empty').style.display='none';txs.forEach(function(t){h+='<div class="tx" onclick="editTx(\''+t.id+'\')"><div><b>'+t.cat+'</b><div style="font-size:11px;opacity:.6">'+(t.wallet||'')+(t.wallet2&&t.type=='pindah'?' → '+t.wallet2:'')+' • '+(new Date(t.t||Date.now()).toLocaleDateString('id-ID'))+'</div></div><div style="color:'+(t.type=='masuk'?'#16a34a':t.type=='pindah'?'#2563eb':'#dc2626')+'">'+(t.type=='masuk'?'+':t.type=='pindah'?'⇄ ':'-')+fmt(t.amount)+'</div></div>'})}$('list').innerHTML=h;renderW();renderKonsul();}catch(e){dbg('render '+e.message)}}
-function renderW(){try{var h='';wallets.forEach(function(w){var tot=0;txs.forEach(function(t){if(t.wallet==w.name){tot+=t.type=='masuk'?Number(t.amount):-Number(t.amount)}if(t.wallet2==w.name&&t.type=='pindah')tot+=Number(t.amount)});h+='<div class="w" onclick="renameW(\''+w.name+'\')"><b>'+w.name+'</b><br><span style="font-size:11px">'+fmt(tot)+'</span></div>'});$('walletList').innerHTML=h||'Belum ada';var o='';wallets.forEach(function(w){o+='<option value="'+w.name+'">'+w.name+'</option>'});o+='<option value="__new">+ Dompet Baru</option>';$('fWallet').innerHTML=o;$('fWallet2').innerHTML=o;var l='<option value="">- Tanpa Link -</option>';nabungs.forEach(function(n){l+='<option value="nabung:'+n.id+'">🎯 '+n.name+'</option>'});hutangs.forEach(function(x){l+='<option value="hutang:'+x.id+'">💸 '+x.name+'</option>'});tagihans.forEach(function(t){l+='<option value="tagihan:'+t.id+'">🧾 '+t.name+'</option>'});$('fLink').innerHTML=l;}catch(e){}}
-function setCatMode(m){catMode=m;renderCats()}
-function renderCats(){try{var h='';cats.filter(function(c){return c.type==catMode}).forEach(function(c){h+='<span class="chip" onclick="editCat(\''+c.name+'\')">'+c.name+' ✏️</span>'});$('catList').innerHTML=h||'Belum ada';var o='';cats.filter(function(c){return c.type==catMode}).forEach(function(c){o+='<option value="'+c.name+'">'+c.name+'</option>'});$('fCat').innerHTML=o;}catch(e){}}
-function addCat(){var n=prompt('Nama kategori baru ('+catMode+'):');if(!n)return;cats.push({name:n,type:catMode});localStorage.setItem('localCats',JSON.stringify(cats));if(uid)roomRef().collection('cats').add({name:n,type:catMode});renderCats()}
-function editCat(name){var n=prompt('Edit / kosongkan=hapus:',name);if(n===null)return;if(!n){cats=cats.filter(function(c){return c.name!=name})}else{cats.forEach(function(c){if(c.name==name)c.name=n})}localStorage.setItem('localCats',JSON.stringify(cats));renderCats()}
-// FIX 4: onType() - pindah paksa kategori Pindah, link dikosongin
-function onType(){var t=$('fType').value;$('fWallet2').style.display=t=='pindah'?'block':'none';$('fLink').style.display=(t=='nabung'||t=='hutang'||t=='tagihan')?'block':'none';if(t=='keluar')catMode='keluar';if(t=='masuk')catMode='masuk';if(t=='pindah'){$('fCat').innerHTML='<option value="Pindah">Pindah Dompet</option>';$('fLink').value='';}else{renderCats()}}
-function openForm(){editingId=null;$('fTitle').innerText='Tambah Transaksi';$('fAmt').value='';$('fLink').style.display='none';$('fWallet2').style.display='none';$('fAct').style.display='none';$('mForm').style.display='flex';renderCats()}
-function closeForm(){$('mForm').style.display='none'}
-function editTx(id){var t=txs.find(function(x){return x.id==id});if(!t)return;editingId=id;$('fTitle').innerText='Edit';$('fAmt').value=t.amount;$('fWallet').value=t.wallet;$('fType').value=t.type;$('fAct').style.display='block';$('mForm').style.display='flex';onType()}
-// FIX 5: saveTx() - pindah jangan jalanin logika link
-async function saveTx(){try{var cat=$('fCat').value||'Lain',amt=Number($('fAmt').value||0),wal=$('fWallet').value,type=$('fType').value,wal2=$('fWallet2').value,link=$('fLink').value||'';if(wal=='__new'){wal=prompt('Nama dompet baru:','Cash');if(!wal)return;wallets.push({name:wal});localStorage.setItem('localWallets',JSON.stringify(wallets));if(uid)await roomRef().collection('wallets').add({name:wal})}if(!amt)return alert('Isi jumlah');if(type=='pindah'){if(!wal2||wal2=='__new')return alert('Pilih dompet tujuan dulu');if(wal2==wal)return alert('Dompet asal & tujuan harus beda');cat='Pindah ke '+wal2;link='';}
-var d={cat:cat,amount:amt,wallet:wal,type:type,wallet2:wal2,link:link,t:Date.now(),localId:'L'+Date.now()};
-if(!uid){txs.unshift({...d,id:d.localId});localStorage.setItem('oldTx',JSON.stringify(txs));closeForm();render();alert('Tersimpan lokal');return}
-if(link && type!='pindah'){var p=link.split(':');if(p[0]=='nabung'){var nb=nabungs.find(function(n){return n.id==p[1]});if(nb)await roomRef().collection('nabung').doc(p[1]).update({have:Number(nb.have||0)+amt})}if(p[0]=='hutang'){var hg=hutangs.find(function(n){return n.id==p[1]});if(hg){var ns=Number(hg.sisa||0)-amt;if(ns<=0){await roomRef().collection('hutang').doc(p[1]).delete();alert('Hutang LUNAS!')}else await roomRef().collection('hutang').doc(p[1]).update({sisa:ns})}}if(p[0]=='tagihan'){await roomRef().collection('tagihan').doc(p[1]).update({status:'Terbayar',lastPaid:Date.now()})}}
-if(editingId&&!String(editingId).startsWith('L')){await txRef().doc(editingId).set(d,{merge:true})}else{await txRef().add(d)}closeForm();}catch(e){alert('Gagal simpan: '+e.message);dbg('saveTx '+e.message)}}
-async function delTx(){if(!editingId)return;if(!confirm('Hapus?'))return;try{if(String(editingId).startsWith('L')){txs=txs.filter(function(x){return x.id!=editingId});localStorage.setItem('oldTx',JSON.stringify(txs))}else{await txRef().doc(editingId).delete()}closeForm();render()}catch(e){alert(e.message)}}
-function addWallet(){var n=prompt('Nama dompet:','BCA');if(!n)return;wallets.push({name:n});localStorage.setItem('localWallets',JSON.stringify(wallets));if(uid)roomRef().collection('wallets').add({name:n});renderW()}
-function renameW(old){var n=prompt('Rename/hapus (kosongkan=hapus):',old);if(n===null)return;if(!n){wallets=wallets.filter(function(w){return w.name!=old})}else{wallets.forEach(function(w){if(w.name==old)w.name=n})}localStorage.setItem('localWallets',JSON.stringify(wallets));renderW()}
-function pindahDompet(){if(wallets.length<2)return alert('Buat 2 dompet dulu!');var dari=prompt('Dari dompet? '+wallets.map(function(w){return w.name}).join(', '),wallets[0].name);var ke=prompt('Ke dompet? '+wallets.map(function(w){return w.name}).join(', '),wallets[1].name);var amt=Number(prompt('Jumlah pindah '+dari+' ke '+ke+' ?','100000')||0);if(!dari||!ke||!amt)return;if(dari==ke)return alert('Dompet asal & tujuan harus beda');var d={cat:'Pindah ke '+ke,amount:amt,wallet:dari,wallet2:ke,type:'pindah',link:'',t:Date.now(),localId:'L'+Date.now()};if(uid)txRef().add(d);else{txs.unshift({...d,id:d.localId});localStorage.setItem('oldTx',JSON.stringify(txs));render()}alert('Berhasil pindah '+fmt(amt)+' '+dari+' → '+ke)}
-function auditSelisih(){var namaDompet=wallets.map(function(w){return w.name});var bal=0;txs.forEach(function(t){var a=Number(t.amount||0);if(t.type=='masuk')bal+=a;else if(t.type!='pindah')bal-=a;});var totalDompet=0;wallets.forEach(function(w){var tot=0;txs.forEach(function(t){if(t.wallet==w.name)tot+=t.type=='masuk'?Number(t.amount||0):-Number(t.amount||0);if(t.wallet2==w.name&&t.type=='pindah')tot+=Number(t.amount||0)});totalDompet+=tot});var h='Saldo atas: '+fmt(bal)+'\nTotal dompet: '+fmt(totalDompet)+'\nSelisih: '+fmt(totalDompet-bal)+'\n\nDompet: '+namaDompet.join(', ')+'\n\nTransaksi YATIM:\n';var ketemu=false;txs.forEach(function(t){if(t.wallet&&!namaDompet.includes(t.wallet)){h+='- ['+t.type+'] '+t.cat+' '+fmt(t.amount)+' asal="'+t.wallet+'" (HILANG)\n';ketemu=true}if(t.wallet2&&t.type=='pindah'&&!namaDompet.includes(t.wallet2)){h+='- [pindah] '+t.cat+' '+fmt(t.amount)+' tujuan="'+t.wallet2+'" (HILANG)\n';ketemu=true}if(!t.wallet){h+='- ['+t.type+'] '+t.cat+' '+fmt(t.amount)+' dompet KOSONG\n';ketemu=true}});if(!ketemu)h+='Nggak ada transaksi yatim. Selisih dari pindah lama yang tercatat sebagai Keluar.';$('auditBox').innerText=h;alert(h)}
-function renderHutang(){try{var h='';hutangs.forEach(function(x){h+='<div style="border:1px solid #fecaca;padding:10px;border-radius:12px;margin:6px 0"><b>'+(x.kind=='bank'?'🏦 ':'👥 ')+x.name+'</b><div style="font-size:12px">Sisa '+fmt(x.sisa)+' / Total '+fmt(x.total)+(x.kind=='bank'?'<br>Tenor '+x.tenor+' bln • Cicilan '+fmt(x.cicilan):'')+'<br>'+(x.ket||'')+'</div><div style="display:flex;gap:6px;margin-top:6px"><button class="btn btnG" onclick="bayarHutang(\''+x.id+'\')">Bayar Cicil</button><button class="btn btnG" onclick="editHutang(\''+x.id+'\')">Edit</button></div></div>'});$('hutangList').innerHTML=h||'Belum ada'}catch(e){}}
-function addHutang(kind){var name=prompt(kind=='bank'?'Nama Bank:':'Nama Teman:');if(!name)return;var total=Number(prompt('Total:','1000000')||0);var obj={name:name,total:total,sisa:total,kind:kind,t:Date.now(),localId:'H'+Date.now()};if(kind=='bank'){obj.tenor=Number(prompt('Tenor bln:','12')||0);obj.cicilan=Number(prompt('Cicilan/bln:','100000')||0);obj.sisaBulan=obj.tenor}else{obj.ket=prompt('Keterangan:','Pinjam')}hutangs.push({...obj,id:obj.localId});localStorage.setItem('localHutang',JSON.stringify(hutangs));if(uid)roomRef().collection('hutang').add(obj);renderHutang()}
-function bayarHutang(id){var x=hutangs.find(function(a){return a.id==id});var bayar=Number(prompt('Bayar berapa?',x.cicilan||0)||0);if(!bayar)return;var wal=prompt('Dari dompet?',wallets[0]?.name||'Cash');if(uid)txRef().add({cat:'Bayar '+x.name,amount:bayar,wallet:wal,type:'hutang',link:'hutang:'+id,t:Date.now()});else{txs.unshift({id:'L'+Date.now(),cat:'Bayar '+x.name,amount:bayar,wallet:wal,type:'hutang',link:'hutang:'+id,t:Date.now()});localStorage.setItem('oldTx',JSON.stringify(txs))}x.sisa=Math.max(0,Number(x.sisa||0)-bayar);if(x.sisa<=0){hutangs=hutangs.filter(function(a){return a.id!=id});alert('LUNAS!')}localStorage.setItem('localHutang',JSON.stringify(hutangs));if(uid&&x.sisa>0)roomRef().collection('hutang').doc(id).update({sisa:x.sisa});renderHutang();render()}
-function editHutang(id){var x=hutangs.find(function(a){return a.id==id});var s=prompt('Edit sisa:',x.sisa);if(s!==null){x.sisa=Number(s);localStorage.setItem('localHutang',JSON.stringify(hutangs));if(uid&&!String(id).startsWith('H'))roomRef().collection('hutang').doc(id).update({sisa:Number(s)});renderHutang()}}
-function renderTagihan(){try{var sorted=[...tagihans].sort(function(a,b){var sa=a.status=='Terbayar'?2:a.status=='Belum Bayar'?1:0;var sb=b.status=='Terbayar'?2:b.status=='Belum Bayar'?1:0;return sa-sb});var h='';sorted.forEach(function(t){h+='<div class="tx" onclick="editTagihan(\''+t.id+'\')"><div><b>'+t.name+'</b><div style="font-size:11px">'+fmt(t.amount)+' • '+t.tipe+' • '+(t.tanggal||'-')+'</div></div><div style="font-size:11px;font-weight:800">'+t.status+'</div></div>'});$('tagihanList').innerHTML=h||'Belum ada'}catch(e){}}
-function addTagihan(){var n=prompt('Nama:','Listrik');if(!n)return;var a=Number(prompt('Jumlah:','200000')||0);var tipe=prompt('Tipe: harian/mingguan/bulanan/tahunan','bulanan');var tgl=prompt('Tanggal:','25');var obj={name:n,amount:a,tipe:tipe||'bulanan',tanggal:tgl,status:'Belum Bayar',t:Date.now(),localId:'T'+Date.now()};tagihans.push({...obj,id:obj.localId});localStorage.setItem('localTagihan',JSON.stringify(tagihans));if(uid)roomRef().collection('tagihan').add(obj);renderTagihan()}
-function editTagihan(id){
-  var t=tagihans.find(function(x){return x.id==id});
-  if(!t) return;
-  // Kalau sudah Terbayar, jangan langsung bayar lagi, cegah double
-  if(t.status=='Terbayar'){
-    if(!confirm('BPJS ini sudah Terbayar.\nMau bayar lagi untuk bulan depan?')) return;
-  } else {
-    if(!confirm('Bayar '+t.name+' '+fmt(t.amount)+'?')) return;
-  }
-  var wal=prompt('Dari dompet:',wallets[0]?.name||'Cash');
-  if(!wal) return;
-  // FIX: Simpan sebagai KELUAR biar PASTI masuk log + ngurangin saldo + ngurangin dompet
-  var d={cat:t.name,amount:Number(t.amount),wallet:wal,type:'keluar',link:'tagihan:'+id,t:Date.now(),localId:'L'+Date.now()};
-  if(uid){ txRef().add(d); }
-  else { txs.unshift({...d,id:d.localId}); localStorage.setItem('oldTx',JSON.stringify(txs)); }
-  t.status='Terbayar'; t.lastPaid=Date.now();
-  localStorage.setItem('localTagihan',JSON.stringify(tagihans));
-  if(uid && !String(id).startsWith('T')) roomRef().collection('tagihan').doc(id).update({status:'Terbayar',lastPaid:Date.now()});
-  renderTagihan(); render();
-  alert('Berhasil bayar '+t.name+' '+fmt(t.amount)+' dari '+wal+'\nSudah masuk ke Log Transaksi.');}
-function renderBudget(){try{var h='';var m=new Date().getMonth();budgets.forEach(function(b){var used=0;txs.filter(function(t){return t.cat==b.cat&&new Date(t.t).getMonth()==m}).forEach(function(t){if(t.type!='masuk'&&t.type!='pindah')used+=Number(t.amount)});var p=b.limit?Math.round(used/b.limit*100):0;h+='<div style="margin:8px 0"><div style="display:flex;justify-content:space-between;font-size:12px"><b>'+b.cat+'</b><span>'+fmt(used)+'/'+fmt(b.limit)+' '+p+'%</span></div><div class="prog"><div style="width:'+Math.min(100,p)+'%"></div></div>'+(p>100?'<div style="font-size:11px;color:#dc2626;font-weight:800">⚠️ LEWAT 100%!</div>':'')+'<button class="btn btnG" onclick="delBudget(\''+b.id+'\')">Hapus</button></div>'});$('budgetList').innerHTML=h||'Belum ada';$('aiBudget').innerText='🤖 AI: '+budgets.map(function(b){var used=0;txs.filter(function(t){return t.cat==b.cat}).forEach(function(t){if(t.type!='masuk'&&t.type!='pindah')used+=Number(t.amount)});return b.cat+' '+Math.round(used/b.limit*100)+'%'}).join(' • ')}catch(e){}}
-function saveBudget(){var c=$('bCat').value.trim();var l=Number($('bAmt').value||0);if(!c||!l)return alert('Isi nama & limit');var obj={cat:c,limit:l,t:Date.now(),localId:'B'+Date.now()};budgets.push({...obj,id:obj.localId});localStorage.setItem('localBudget',JSON.stringify(budgets));if(uid)roomRef().collection('budget').add(obj);$('bCat').value='';$('bAmt').value='';renderBudget()}
-function delBudget(id){budgets=budgets.filter(function(b){return b.id!=id});localStorage.setItem('localBudget',JSON.stringify(budgets));if(uid&&!String(id).startsWith('B'))roomRef().collection('budget').doc(id).delete();renderBudget()}
-function renderNabung(){try{var h='';nabungs.forEach(function(n){var have=Number(n.have||0),tar=Number(n.target||1),p=Math.min(100,Math.round(have/tar*100));h+='<div style="border:1px solid #fecaca;padding:10px;border-radius:12px;margin:6px 0"><div style="display:flex;justify-content:space-between"><b>'+n.name+'</b><span>'+p+'%</span></div><div class="prog"><div style="width:'+p+'%"></div></div><div style="font-size:11px">'+fmt(have)+'/'+fmt(tar)+' sisa '+fmt(tar-have)+' • '+(n.waktu||'')+'</div><button class="btn btnG" onclick="delNabung(\''+n.id+'\')">Hapus</button></div>'});$('nabungList').innerHTML=h||'Belum ada'}catch(e){}}
-function addNabung(){var n=prompt('Nama target:','Liburan');if(!n)return;var t=Number(prompt('Target:','20000000')||0);var w=prompt('Waktu:','Des 2027');var obj={name:n,target:t,have:0,waktu:w,t:Date.now(),localId:'N'+Date.now()};nabungs.push({...obj,id:obj.localId});localStorage.setItem('localNabung',JSON.stringify(nabungs));if(uid)roomRef().collection('nabung').add(obj);renderNabung()}
-function delNabung(id){nabungs=nabungs.filter(function(n){return n.id!=id});localStorage.setItem('localNabung',JSON.stringify(nabungs));if(uid&&!String(id).startsWith('N'))roomRef().collection('nabung').doc(id).delete();renderNabung()}
-function setAn(m){anMode=m;renderAnalisis()}
-function renderAnalisis(){try{var data={};var list=anMode=='bulan'?txs.filter(function(t){return new Date(t.t).getMonth()==new Date().getMonth()}):txs;list.filter(function(t){return t.type!='masuk'&&t.type!='pindah'}).forEach(function(t){data[t.cat]=(data[t.cat]||0)+Number(t.amount||0)});var total=Object.values(data).reduce(function(a,b){return a+b},0);var h='';Object.entries(data).sort(function(a,b){return b[1]-a[1]}).forEach(function(kv){var p=total?Math.round(kv[1]/total*100):0;h+='<div style="margin:6px 0"><div style="display:flex;justify-content:space-between;font-size:12px"><b>'+kv[0]+'</b><span>'+fmt(kv[1])+' '+p+'%</span></div><div class="prog"><div style="width:'+p+'%"></div></div></div>'});$('analisisList').innerHTML=h||'Belum ada';var c=$('chart');var ctx=c.getContext('2d');ctx.clearRect(0,0,320,120);var x=10;Object.values(data).forEach(function(v){var hh=total?Math.min(100,v/total*100):0;ctx.fillStyle='#dc2626';ctx.fillRect(x,110-hh,20,hh);x+=26});}catch(e){}}
-function bagiGaji(){var gaji=Number($('gajiIn').value||0);if(!gaji)return alert('Isi gaji');var pj=Number($('pJajan').value||0),pn=Number($('pNabung').value||0),ph=Number($('pHutang').value||0),pt=Number($('pTagih').value||0),pd=Number($('pDar').value||0);if(pj+pn+ph+pt+pd!=100)return alert('Total harus 100%');var saran=hutangs.length>0?'💡 Hutang ada, naikkan hutang jadi 25%. ':'';$('bagiHasil').innerHTML='<div style="background:#fff7ed;padding:12px;border-radius:12px">Gaji '+fmt(gaji)+'<br>🍔 Jajan '+fmt(Math.round(gaji*pj/100))+'<br>🎯 Nabung '+fmt(Math.round(gaji*pn/100))+'<br>💸 Hutang '+fmt(Math.round(gaji*ph/100))+'<br>🧾 Tagihan '+fmt(Math.round(gaji*pt/100))+'<br>🚨 Darurat '+fmt(Math.round(gaji*pd/100))+'<br><br>🤖 '+saran+'</div>'}
-function saveBagi(){var gaji=Number($('gajiIn').value||0);if(!gaji)return alert('Isi gaji');var obj={gaji:gaji,ket:$('gajiKet').value,jajan:$('pJajan').value,nabung:$('pNabung').value,hutang:$('pHutang').value,tagihan:$('pTagih').value,darurat:$('pDar').value,t:Date.now(),localId:'G'+Date.now()};bagiSaved.push({...obj,id:obj.localId});if(uid)roomRef().collection('bagi').add(obj);alert('Tersimpan!');renderBagiSaved()}
-function renderBagiSaved(){try{var h='';bagiSaved.forEach(function(b){h+='<div style="background:#fff;padding:8px;border-radius:8px;margin:4px 0;border:1px solid #fecaca">💾 Gaji '+fmt(b.gaji)+' • '+b.ket+'</div>'});$('bagiSaved').innerHTML=h}catch(e){}}
-function renderKonsul(){try{var m=new Date().getMonth();var tk=0,tm=0;txs.filter(function(t){return t.type!='masuk'&&t.type!='pindah'&&new Date(t.t).getMonth()==m}).forEach(function(t){tk+=Number(t.amount||0)});txs.filter(function(t){return t.type=='masuk'&&new Date(t.t).getMonth()==m}).forEach(function(t){tm+=Number(t.amount||0)});var hut=0;hutangs.forEach(function(x){hut+=Number(x.sisa||0)});$('konsulBox').innerHTML='Masuk '+fmt(tm)+' Keluar '+fmt(tk)+' Sisa '+fmt(tm-tk)+'<br>Hutang '+fmt(hut)+'<br>'+(tk>tm*0.8?'⚠️ Keluar >80%!':hut>0?'💡 Naikkan hutang 25%':'✅ Aman')}catch(e){}}
-function cekTanya(){var q=$('tanyaQ').value;var harga=Number($('tanyaHarga').value||0);var l=Number($('tanyaL').value);if(!q)return alert('Isi mau beli apa');var bal=0;txs.forEach(function(t){if(t.type=='masuk')bal+=Number(t.amount||0);else if(t.type!='pindah')bal-=Number(t.amount||0)});var lvl=l==1?'SANGAT PENTING':l==2?'PENTING':l==3?'CUKUP PENTING':l==4?'KURANG PENTING':'TIDAK PENTING - NAFSU';var ans=l==1?'✅ Boleh, butuh banget!':l==2?(bal>harga?'✅ Boleh, sisa '+fmt(bal-harga):'❌ Tunda, saldo kurang'):l==3?'⏳ Pikir 2 hari':l==4?'⏳ Tunda 1 minggu':'❌ Jangan! Nafsu doang';$('tanyaAns').innerHTML='<b>'+q+' '+fmt(harga)+'</b><br>Alasan: '+$('tanyaAlasan').value+'<br>Tingkat: '+lvl+'<br>'+ans+'<br>Saldo '+fmt(bal)}
-function renderAcc(){try{var h='';accs.forEach(function(a){var ac=a.id==room;h+='<div style="padding:12px;border:1px solid '+(ac?'#dc2626':'#fecaca')+';border-radius:12px;margin-bottom:8px;display:flex;justify-content:space-between;background:'+(ac?'#fff7ed':'#fff')+';cursor:pointer" onclick="switchAcc(\''+a.id+'\')"><span>'+(ac?'🟢 ':'')+a.name+'</span><span style="font-size:11px">'+a.id.slice(-4)+' • tahan lama rename</span></div>'});$('accList').innerHTML=h}catch(e){}}
-function clearAllData(){txs=[]; wallets=[{name:'Cash'}]; hutangs=[]; tagihans=[]; budgets=[]; nabungs=[]; cats=[{name:'Makan',type:'keluar'},{name:'Transport',type:'keluar'},{name:'Jajan',type:'keluar'},{name:'Gaji',type:'masuk'},{name:'Jualan',type:'masuk'}]; bagiSaved=[];}
-function switchAcc(id){ if(id==room) return;clearAllData();curAcc=id; room=id; saveAccs();render(); if(uid) syncFirebase();}
-function createAcc(){var n=$('newAcc').value.trim();if(!n)return alert('Isi nama');var id='room_'+Date.now();accs.push({id:id,name:n});curAcc=id;room=id;saveAccs();$('newAcc').value='';renderAcc();render();if(uid)syncFirebase()}
-function showCode(){var code=Math.floor(100000+Math.random()*900000).toString();$('myCode').innerText=code.slice(0,3)+'-'+code.slice(3);$('codeBox').style.display='block';$('enterBox').style.display='none';if(uid)db.collection('codes').doc(code).set({room:room,exp:Date.now()+10*60*1000});else alert('Kode lokal: '+code+' (Firebase belum nyambung, pakai ID kamar aja)')}
-function enterCode(){$('enterBox').style.display='block';$('codeBox').style.display='none'}
-async function doConnect(){var co=$('inCode').value.replace(/[^0-9]/g,'');if(co.length!=6)return alert('Kode 6 digit');if(!uid)return alert('Firebase belum nyambung, pakai ID kamar di Setting');try{var doc=await db.collection('codes').doc(co).get();if(!doc.exists)return alert('Kode salah');var r=doc.data().room;if(!accs.find(function(a){return a.id==r})){accs.push({id:r,name:prompt('Nama:','Terhubung')||'Terhubung'})}curAcc=r;room=r;saveAccs();alert('Berhasil!');syncFirebase();render()}catch(e){alert(e.message)}}
-function exportJSON(){var b=new Blob([JSON.stringify({room:room,accs:accs,txs:txs,wallets:wallets,hutangs:hutangs,tagihans:tagihans,budgets:budgets,nabungs:nabungs},null,2)],{type:'application/json'});var u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download='catatduit-'+room+'.json';a.click()}
-var firebaseConfig={apiKey:"AIzaSyA93AVYbEp3ocRCQEtrh0v7_9I5cpJKHiI",authDomain:"catatduit-55060.firebaseapp.com",projectId:"catatduit-55060",storageBucket:"catatduit-55060.firebasestorage.app",messagingSenderId:"1025155283832",appId:"1:1025155283832:web:c89ea220aecbbb1200e68d"};
-try{firebase.initializeApp(firebaseConfig)}catch(e){}
-var auth=null,db=null;try{auth=firebase.auth();db=firebase.firestore()}catch(e){dbg('firebase init gagal '+e.message)}
-function roomRef(){return db.collection('rooms').doc(room)}
-function txRef(){return roomRef().collection('tx')}
-function syncFirebase(){
-  if(!uid||!db) return;
-  dbg('sync mulai uid='+uid.slice(0,6)+' room='+room);
-  try{txRef().orderBy('t','desc').limit(100).onSnapshot(function(s){var arr=[];s.forEach(function(d){arr.push({id:d.id,...d.data()})});{txs=arr;localStorage.setItem('oldTx',JSON.stringify(txs));render()}setSync(true,'Sudah Sync ✓');dbg('sync OK tx='+arr.length)},function(err){setSync(false,'Belum Sync: '+err.message);dbg('sync tx err '+err.message)})}catch(e){dbg('sync tx '+e.message)}
-  try{roomRef().collection('wallets').onSnapshot(function(s){wallets=[];s.forEach(function(d){wallets.push({id:d.id,...d.data()})});localStorage.setItem('localWallets',JSON.stringify(wallets));renderW()}})}catch(e){}
-  try{roomRef().collection('cats').onSnapshot(function(s){cats=[];s.forEach(function(d){cats.push({id:d.id,...d.data()})});localStorage.setItem('localCats',JSON.stringify(cats));renderCats()}})}catch(e){}
-  try{roomRef().collection('hutang').onSnapshot(function(s){hutangs=[];s.forEach(function(d){hutangs.push({id:d.id,...d.data()})});localStorage.setItem('localHutang',JSON.stringify(hutangs));renderHutang()})}catch(e){}
-  try{roomRef().collection('tagihan').onSnapshot(function(s){tagihans=[];s.forEach(function(d){tagihans.push({id:d.id,...d.data()})});localStorage.setItem('localTagihan',JSON.stringify(tagihans));renderTagihan()})}catch(e){}
-  try{roomRef().collection('budget').onSnapshot(function(s){budgets=[];s.forEach(function(d){budgets.push({id:d.id,...d.data()})});localStorage.setItem('localBudget',JSON.stringify(budgets));renderBudget()})}catch(e){}
-  try{roomRef().collection('nabung').onSnapshot(function(s){nabungs=[];s.forEach(function(d){nabungs.push({id:d.id,...d.data()})});localStorage.setItem('localNabung',JSON.stringify(nabungs));renderNabung()})}catch(e){}
-  try{roomRef().collection('bagi').onSnapshot(function(s){bagiSaved=[];s.forEach(function(d){bagiSaved.push({id:d.id,...d.data()})});renderBagiSaved()})}catch(e){}
+let db = null;
+let mode = 'keluar';
+let data = JSON.parse(localStorage.getItem('catatduit_data')||'[]');
+const debugEl = document.getElementById('debug');
+function log(m){ debugEl.textContent = m; console.log(m); }
+function setMode(m){ mode = m; }
+function formatRp(n){ return 'Rp ' + Number(n||0).toLocaleString('id-ID'); }
+function norm(d){
+  const jumlah = Number(d.jumlah ?? d.amount ?? d.nominal ?? d.value ?? 0);
+  const m = String(d.mode ?? d.type ?? d.jenis ?? d.tipe ?? '').toLowerCase();
+  const isMasuk = m.includes('masuk') || m.includes('in') || m==='income' || d.isIncome===true;
+  return { tgl: d.tgl ?? d.date ?? d.tanggal ?? '', jumlah, ket: d.ket ?? d.keterangan ?? d.desc ?? d.description ?? '', kategori: d.kategori ?? d.category ?? '', mode: isMasuk ? 'masuk' : 'keluar', time: d.time ?? 0 };
 }
-render();renderCats();renderHutang();renderTagihan();renderBudget();renderNabung();renderAcc();
-setSync(false,'Siap - Mode Lokal');
-dbg('render awal selesai, coba login Firebase...');
-if(auth){
-  auth.onAuthStateChanged(function(u){
-    if(!u){dbg('belum login, coba anonymous...');auth.signInAnonymously().catch(function(e){dbg('login gagal '+e.message);setSync(false,'Belum Sync - Mode Lokal, tetap bisa klik')});return}
-    uid=u.uid;dbg('login OK uid='+uid.slice(0,6));setSync(true,'Sudah Sync ✓');syncFirebase();
-  });
-  auth.signInAnonymously().catch(function(e){dbg('signIn err '+e.message)});
-}else{dbg('auth null, mode lokal saja')}
+function render(){
+  let saldo = 0;
+  data.forEach(raw=>{ const d = norm(raw); if(d.mode==='masuk') saldo+=d.jumlah; else saldo-=d.jumlah; });
+  document.getElementById('saldoText').textContent = formatRp(saldo);
+  let html = '<table><tr><th>Tgl</th><th>Ket</th><th>Jumlah</th></tr>';
+  [...data].map(norm).reverse().slice(0,25).forEach(d=>{ html += '<tr><td>'+d.tgl+'</td><td>'+d.ket+' ('+d.kategori+')</td><td>'+formatRp(d.jumlah)+'</td></tr>'; });
+  html += '</table>';
+  document.getElementById('list').innerHTML = data.length ? html : 'Belum ada transaksi';
+}
+function simpan(){
+  const tgl = document.getElementById('tgl').value || new Date().toISOString().slice(0,10);
+  const jumlah = Number(document.getElementById('jumlah').value||0);
+  const ket = document.getElementById('ket').value || document.getElementById('kategori').value;
+  const kategori = document.getElementById('kategori').value;
+  if(!jumlah){ alert('Isi jumlah dulu Mas'); return; }
+  const item = {tgl, jumlah, ket, kategori, mode, time: Date.now()};
+  data.push(item);
+  localStorage.setItem('catatduit_data', JSON.stringify(data));
+  if(db){ db.collection('transaksi').add(item).then(()=>log('sync OK tx='+data.length)).catch(e=>log('sync gagal: '+e.message)); }
+  document.getElementById('jumlah').value=''; document.getElementById('ket').value='';
+  render(); log('tersimpan lokal, total tx='+data.length);
+}
+function showRincian(){ alert('Total transaksi: '+data.length); render(); }
+function showSaldo(){ render(); }
+try{
+  const firebaseConfig = {
+    apiKey: "AIzaSyA93AVYbEp3ocRCQEtrh0v7_9I5cpJKHiI",
+    authDomain: "catatduit-55060.firebaseapp.com",
+    projectId: "catatduit-55060",
+    storageBucket: "catatduit-55060.firebasestorage.app",
+    messagingSenderId: "1025155283832",
+    appId: "1:1025155283832:web:c89ea220aecbbb1200e68d",
+    measurementId: "G-1HB989XJQ3"
+  };
+  firebase.initializeApp(firebaseConfig);
+  db = firebase.firestore();
+  document.getElementById('statusTop').textContent = 'Siap - Online';
+  log('login OK, coba sync...');
+  db.collection('transaksi').orderBy('time','desc').limit(100).get().then(s=>{
+    if(!s.empty){ data = []; s.forEach(doc=>data.push(doc.data())); localStorage.setItem('catatduit_data', JSON.stringify(data)); }
+    render(); log('sync OK tx='+data.length);
+  }).catch(e=>{ render(); log('sync gagal: '+e.message+' (pakai data lokal tx='+data.length+')'); });
+}catch(e){ render(); log('Mode Lokal - '+e.message); }
+document.getElementById('tgl').value = new Date().toISOString().slice(0,10);
+render();
 </script>
-</body></html>                          
+</body>
+</html>

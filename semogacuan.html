@@ -109,7 +109,26 @@ function bayarHutang(id){var x=hutangs.find(function(a){return a.id==id});var ba
 function editHutang(id){var x=hutangs.find(function(a){return a.id==id});var s=prompt('Edit sisa:',x.sisa);if(s!==null){x.sisa=Number(s);localStorage.setItem('localHutang',JSON.stringify(hutangs));if(uid&&!String(id).startsWith('H'))roomRef().collection('hutang').doc(id).update({sisa:Number(s)});renderHutang()}}
 function renderTagihan(){try{var sorted=[...tagihans].sort(function(a,b){var sa=a.status=='Terbayar'?2:a.status=='Belum Bayar'?1:0;var sb=b.status=='Terbayar'?2:b.status=='Belum Bayar'?1:0;return sa-sb});var h='';sorted.forEach(function(t){h+='<div class="tx" onclick="editTagihan(\''+t.id+'\')"><div><b>'+t.name+'</b><div style="font-size:11px">'+fmt(t.amount)+' • '+t.tipe+' • '+(t.tanggal||'-')+'</div></div><div style="font-size:11px;font-weight:800">'+t.status+'</div></div>'});$('tagihanList').innerHTML=h||'Belum ada'}catch(e){}}
 function addTagihan(){var n=prompt('Nama:','Listrik');if(!n)return;var a=Number(prompt('Jumlah:','200000')||0);var tipe=prompt('Tipe: harian/mingguan/bulanan/tahunan','bulanan');var tgl=prompt('Tanggal:','25');var obj={name:n,amount:a,tipe:tipe||'bulanan',tanggal:tgl,status:'Belum Bayar',t:Date.now(),localId:'T'+Date.now()};tagihans.push({...obj,id:obj.localId});localStorage.setItem('localTagihan',JSON.stringify(tagihans));if(uid)roomRef().collection('tagihan').add(obj);renderTagihan()}
-function editTagihan(id){var t=tagihans.find(function(x){return x.id==id});if(confirm('Bayar '+t.name+'?')){var wal=prompt('Dari dompet:',wallets[0]?.name||'Cash');if(uid)txRef().add({cat:t.name,amount:t.amount,wallet:wal,type:'tagihan',link:'tagihan:'+id,t:Date.now()});t.status='Terbayar';localStorage.setItem('localTagihan',JSON.stringify(tagihans));if(uid&&!String(id).startsWith('T'))roomRef().collection('tagihan').doc(id).update({status:'Terbayar'});renderTagihan();render()}else if(confirm('Hapus & kembalikan uang?')){tagihans=tagihans.filter(function(x){return x.id!=id});localStorage.setItem('localTagihan',JSON.stringify(tagihans));if(uid&&!String(id).startsWith('T'))roomRef().collection('tagihan').doc(id).delete();renderTagihan()}}
+function editTagihan(id){
+  var t=tagihans.find(function(x){return x.id==id});
+  if(!t) return;
+  // Kalau sudah Terbayar, jangan langsung bayar lagi, cegah double
+  if(t.status=='Terbayar'){
+    if(!confirm('BPJS ini sudah Terbayar.\nMau bayar lagi untuk bulan depan?')) return;
+  } else {
+    if(!confirm('Bayar '+t.name+' '+fmt(t.amount)+'?')) return;
+  }
+  var wal=prompt('Dari dompet:',wallets[0]?.name||'Cash');
+  if(!wal) return;
+  // FIX: Simpan sebagai KELUAR biar PASTI masuk log + ngurangin saldo + ngurangin dompet
+  var d={cat:t.name,amount:Number(t.amount),wallet:wal,type:'keluar',link:'tagihan:'+id,t:Date.now(),localId:'L'+Date.now()};
+  if(uid){ txRef().add(d); }
+  else { txs.unshift({...d,id:d.localId}); localStorage.setItem('oldTx',JSON.stringify(txs)); }
+  t.status='Terbayar'; t.lastPaid=Date.now();
+  localStorage.setItem('localTagihan',JSON.stringify(tagihans));
+  if(uid && !String(id).startsWith('T')) roomRef().collection('tagihan').doc(id).update({status:'Terbayar',lastPaid:Date.now()});
+  renderTagihan(); render();
+  alert('Berhasil bayar '+t.name+' '+fmt(t.amount)+' dari '+wal+'\nSudah masuk ke Log Transaksi.');}
 function renderBudget(){try{var h='';var m=new Date().getMonth();budgets.forEach(function(b){var used=0;txs.filter(function(t){return t.cat==b.cat&&new Date(t.t).getMonth()==m}).forEach(function(t){if(t.type!='masuk'&&t.type!='pindah')used+=Number(t.amount)});var p=b.limit?Math.round(used/b.limit*100):0;h+='<div style="margin:8px 0"><div style="display:flex;justify-content:space-between;font-size:12px"><b>'+b.cat+'</b><span>'+fmt(used)+'/'+fmt(b.limit)+' '+p+'%</span></div><div class="prog"><div style="width:'+Math.min(100,p)+'%"></div></div>'+(p>100?'<div style="font-size:11px;color:#dc2626;font-weight:800">⚠️ LEWAT 100%!</div>':'')+'<button class="btn btnG" onclick="delBudget(\''+b.id+'\')">Hapus</button></div>'});$('budgetList').innerHTML=h||'Belum ada';$('aiBudget').innerText='🤖 AI: '+budgets.map(function(b){var used=0;txs.filter(function(t){return t.cat==b.cat}).forEach(function(t){if(t.type!='masuk'&&t.type!='pindah')used+=Number(t.amount)});return b.cat+' '+Math.round(used/b.limit*100)+'%'}).join(' • ')}catch(e){}}
 function saveBudget(){var c=$('bCat').value.trim();var l=Number($('bAmt').value||0);if(!c||!l)return alert('Isi nama & limit');var obj={cat:c,limit:l,t:Date.now(),localId:'B'+Date.now()};budgets.push({...obj,id:obj.localId});localStorage.setItem('localBudget',JSON.stringify(budgets));if(uid)roomRef().collection('budget').add(obj);$('bCat').value='';$('bAmt').value='';renderBudget()}
 function delBudget(id){budgets=budgets.filter(function(b){return b.id!=id});localStorage.setItem('localBudget',JSON.stringify(budgets));if(uid&&!String(id).startsWith('B'))roomRef().collection('budget').doc(id).delete();renderBudget()}

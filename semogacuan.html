@@ -50,7 +50,7 @@ nav button.active{background:#dc2626;color:#fff}
 <div id="tabAnalisis" class="tab"><div class="card"><b>📈 Analisis</b><div style="display:flex;gap:6px;margin:6px 0"><button class="btn btnG" onclick="setAn('bulan')">Bulan Ini</button><button class="btn btnG" onclick="setAn('all')">All Time</button></div><canvas id="chart" width="320" height="120" style="background:#fff7ed;border-radius:10px;width:100%"></canvas><div id="analisisList"></div></div></div>
 <div id="tabKonsul" class="tab"><div class="card"><b>💰 Bagi Gaji + AI Konsul</b><input id="gajiIn" class="inp" type="number" placeholder="Gaji: 5000000"><input id="gajiKet" class="inp" placeholder="Keterangan: Gajian tgl 25"><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px"><div>Jajan%<input id="pJajan" class="inp" type="number" value="20"></div><div>Nabung%<input id="pNabung" class="inp" type="number" value="30"></div><div>Hutang%<input id="pHutang" class="inp" type="number" value="20"></div><div>Tagihan%<input id="pTagih" class="inp" type="number" value="20"></div><div>Darurat%<input id="pDar" class="inp" type="number" value="10"></div></div><button class="btn btnP" style="width:100%" onclick="bagiGaji()">🔥 Bagi & Konsul AI</button><div id="bagiHasil" style="margin-top:8px;font-size:12px"></div><button class="btn btnG" style="width:100%;margin-top:6px" onclick="saveBagi()">💾 Simpan</button><div id="bagiSaved" style="font-size:12px;margin-top:6px"></div><div style="background:#fef3c7;padding:8px;border-radius:10px;margin-top:8px;font-size:12px"><b>🤖 AI Konsul</b><div id="konsulBox">-</div></div></div></div>
 <div id="tabTanya" class="tab"><div class="card"><b>🛒 Tanya Beli Level 1-5</b><input id="tanyaQ" class="inp" placeholder="Mau beli apa?"><input id="tanyaHarga" class="inp" type="number" placeholder="Harga"><input id="tanyaAlasan" class="inp" placeholder="Alasan"><select id="tanyaL" class="inp"><option value="1">1 Butuh Banget</option><option value="2">2 Butuh</option><option value="3">3 Lumayan</option><option value="4">4 Pengen</option><option value="5">5 Nafsu</option></select><button class="btn btnP" style="width:100%" onclick="cekTanya()">Cek Boleh?</button><div id="tanyaAns" style="font-size:12px;margin-top:6px"></div></div></div>
-<div id="tabSetting" class="tab"><div class="card"><b>👥 Akun / Kamar</b><div id="accList"></div><div style="display:flex;gap:6px"><input id="newAcc" class="inp" placeholder="Nama baru: Warung" style="flex:1"><button class="btn btnP" onclick="createAcc()">+</button></div></div><div class="card"><b>🔗 Hubungkan Perangkat</b><div style="display:flex;gap:6px"><button class="btn btnG" style="flex:1" onclick="showCode()">Tampilkan Kode</button><button class="btn btnP" style="flex:1" onclick="enterCode()">Masukkan Kode</button></div><div id="codeBox" style="display:none;text-align:center;background:#fff7ed;padding:12px;border-radius:10px;margin-top:8px"><div id="myCode" style="font-size:26px;font-weight:900">------</div></div><div id="enterBox" style="display:none;margin-top:8px"><input id="inCode" class="inp" placeholder="123456" style="text-align:center;font-size:18px"><button class="btn btnP" style="width:100%" onclick="doConnect()">Hubungkan</button></div></div><div class="card"><b>💾 Data</b><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn btnG" onclick="exportJSON()">Export JSON</button><button class="btn btnG" onclick="window.print()">🖨️ Print</button><button class="btn btnG" onclick="safeReset()">Reset Local (Aman)</button></div><div style="font-size:11px;margin-top:8px">ID: <span id="roomId2">-</span> • <span id="fbStat">-</span></div></div></div>
+<div id="tabSetting" class="tab"><div class="card"><b>👥 Akun / Kamar</b><div id="accList"></div><div style="display:flex;gap:6px"><input id="newAcc" class="inp" placeholder="Nama baru: Warung" style="flex:1"><button class="btn btnP" onclick="createAcc()">+</button></div></div><div class="card"><b>🔗 Hubungkan Perangkat</b><div style="display:flex;gap:6px"><button class="btn btnG" style="flex:1" onclick="showCode()">Tampilkan Kode</button><button class="btn btnP" style="flex:1" onclick="enterCode()">Masukkan Kode</button></div><div id="codeBox" style="display:none;text-align:center;background:#fff7ed;padding:12px;border-radius:10px;margin-top:8px"><div id="myCode" style="font-size:26px;font-weight:900">------</div></div><div id="enterBox" style="display:none;margin-top:8px"><input id="inCode" class="inp" placeholder="123456" style="text-align:center;font-size:18px"><button class="btn btnP" style="width:100%" onclick="doConnect()">Hubungkan</button></div></div><div class="card"><b>💾 Data</b><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn btnG" onclick="exportJSON()">Export JSON</button><button class="btn btnG" onclick="window.print()">🖨️ Print</button><button class="btn btnG" onclick="safeReset()">Reset Aman</button></div><div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px"><button class="btn btnG" onclick="cekLaci()">Cek Semua Laci</button><button class="btn btnP" onclick="pulihkanBySuffix('2374','Akun Saya',636600)">Pulihkan Akun Saya 2374</button><button class="btn btnP" onclick="pulihkanBySuffix('1550','Dana Rumah Kayu',1490149)">Pulihkan Rumah Kayu 1550</button></div><div style="font-size:11px;margin-top:8px">ID: <span id="roomId2">-</span> • <span id="fbStat">-</span></div></div></div>
 <button class="fab" onclick="openForm()">+</button>
 <div id="mForm" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:50;align-items:end"><div style="background:#fff;width:100%;border-radius:18px 18px 0 0;padding:14px"><h3 id="fTitle">Tambah</h3><select id="fCat" class="inp"></select><input id="fAmt" class="inp" type="number" placeholder="Jumlah"><select id="fWallet" class="inp"></select><select id="fType" class="inp" onchange="onType()"><option value="keluar">Keluar</option><option value="masuk">Masuk</option><option value="pindah">Pindah Dompet</option><option value="nabung">Nabung (link Target)</option><option value="hutang">Bayar Hutang (link)</option><option value="tagihan">Bayar Tagihan (link)</option></select><select id="fWallet2" class="inp" style="display:none"></select><select id="fLink" class="inp" style="display:none"></select><div style="display:flex;gap:6px"><button class="btn btnP" style="flex:1" onclick="saveTx()">Simpan</button><button class="btn btnG" style="flex:1" onclick="closeForm()">Batal</button></div><div id="fAct" style="display:none;margin-top:6px"><button class="btn" style="width:100%;background:#fee2e2;color:#dc2626" onclick="delTx()">Hapus (Hutang/Tagihan balik)</button></div></div></div>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
@@ -210,10 +210,49 @@ function enterCode(){$('enterBox').style.display='block'}
 function doConnect(){alert('Kode diterima (mode demo lokal). Untuk sync antar HP, pakai Export/Import JSON di bawah.')}
 function exportJSON(){var blob=new Blob([JSON.stringify({room:room,txs:txs,hutangs:hutangs,tagihans:tagihans,budgets:budgets,nabungs:nabungs,wallets:wallets,cats:cats})],{type:'application/json'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='catatduit-'+room+'.json';a.click()}
 function safeReset(){if(!confirm('Reset? Ini bakal hapus data akun ini. Export dulu? Klik OK untuk Export dulu, Cancel untuk batal.'))return;exportJSON();setTimeout(function(){if(confirm('Udah ke-download? Klik OK untuk hapus, Cancel untuk batal.')){localStorage.removeItem(K('oldTx'));localStorage.removeItem(K('localHutang'));localStorage.removeItem(K('localTagihan'));localStorage.removeItem(K('localBudget'));localStorage.removeItem(K('localNabung'));location.reload()}},500)}
+function cekLaci(){
+  var out='';
+  for(var i=0;i<localStorage.length;i++){
+    var k=localStorage.key(i);
+    var v=localStorage.getItem(k)||'';
+    if(k.indexOf('oldTx')>=0 || k.indexOf('BACKUP')>=0){
+      try{
+        var arr=JSON.parse(v);
+        var txs2 = arr.txs || arr;
+        var bal=0;
+        if(Array.isArray(txs2)){ txs2.forEach(function(t){ bal += t.type=='masuk' ? Number(t.amount||0) : -Number(t.amount||0) }); }
+        out += k + ' -> ' + (Array.isArray(txs2)?txs2.length:0) + ' tx, saldo ' + bal.toLocaleString('id-ID') + '\n';
+      }catch(e){ out += k + ' -> rusak\n'; }
+    }
+  }
+  alert(out || 'Nggak ada laci ketemu');
+}
+function pulihkanBySuffix(suffix, nama, harusBal){
+  var kunci = null;
+  for(var i=0;i<localStorage.length;i++){
+    var k = localStorage.key(i);
+    if(k.indexOf(suffix) >= 0 && k.indexOf('oldTx') >= 0){ kunci = k; break; }
+  }
+  if(!kunci) return alert('Laci '+suffix+' ngga ketemu. Klik Cek Semua Laci, fotoin ke aku.');
+  var arr = JSON.parse(localStorage.getItem(kunci)||'[]');
+  var bal = 0;
+  arr.forEach(function(t){ bal += t.type=='masuk' ? Number(t.amount||0) : -Number(t.amount||0) });
+  if(!confirm(nama+' ketemu di '+kunci+'\nSaldo Rp '+bal.toLocaleString('id-ID')+'\nHarusnya Rp '+harusBal.toLocaleString('id-ID')+'\nTimpa ke kamar yang lagi aktif ini?')) return;
+  txs = arr;
+  var base = kunci.replace('oldTx','');
+  try{hutangs=JSON.parse(localStorage.getItem('localHutang'+base)||'[]')}catch(e){}
+  try{tagihans=JSON.parse(localStorage.getItem('localTagihan'+base)||'[]')}catch(e){}
+  try{budgets=JSON.parse(localStorage.getItem('localBudget'+base)||'[]')}catch(e){}
+  try{nabungs=JSON.parse(localStorage.getItem('localNabung'+base)||'[]')}catch(e){}
+  try{wallets=JSON.parse(localStorage.getItem('localWallets'+base)||'[]')}catch(e){wallets=[{name:'Cash'}]}
+  saveRoom();
+  alert('Beres! Reload, cek saldo harusnya '+harusBal.toLocaleString('id-ID'));
+  location.reload();
+}
 try{
   var firebaseConfig={apiKey:"AIzaSyA93AVYbEp3ocRCQEtrh0v7_9I5cpJKHiI",authDomain:"catatduit-55060.firebaseapp.com",projectId:"catatduit-55060",storageBucket:"catatduit-55060.firebasestorage.app",messagingSenderId:"1025155283832",appId:"1:1025155283832:web:c89ea220aecbbb1200e68d"};
   firebase.initializeApp(firebaseConfig);
   firebase.auth().signInAnonymously().then(function(){uid='anon';setSync(true,'● Online - Tersambung')}).catch(function(){setSync(false,'● Offline - Mode Lokal')});
 }catch(e){setSync(false,'● Offline - Mode Lokal')}
 render();
-</script></body></html>
+</script></body></html> 

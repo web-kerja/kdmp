@@ -159,6 +159,15 @@ function delTx(){if(!editingId)return;if(!confirm('Hapus?'))return;txs=txs.filte
 function addWallet(){var n=prompt('Nama dompet:','BCA');if(!n)return;wallets.push({name:n});saveLocalOnly();syncOne('wallets',n,{name:n});renderW()}
 function renameW(old){var n=prompt('Rename/hapus (kosongkan=hapus):',old);if(n===null)return;if(!n){wallets=wallets.filter(function(w){return w.name!=old});syncOne('wallets',old,null,true)}else{wallets.forEach(function(w){if(w.name==old)w.name=n});syncOne('wallets',n,{name:n})}saveLocalOnly();renderW()}
 function renderHutang(){
+  // FIX: ID kembar bikin edit selalu ke Prioritas 1
+  try{
+    var _seen={}; var _ubah=false;
+    hutangs.forEach(function(x,i){
+      if(!x.id || _seen[x.id]){ x.id='H'+Date.now()+'_'+i+'_'+Math.floor(Math.random()*9999); _ubah=true; }
+      _seen[x.id]=1;
+    });
+    if(_ubah){ saveLocalOnly(); hutangs.forEach(function(x){ syncOne('hutang',x.id,x); }); }
+  }catch(e){}
   try{
     var now=new Date();
     var sorted=hutangs.slice().sort(function(a,b){

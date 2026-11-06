@@ -176,7 +176,30 @@ function renderHutang(){
   }catch(e){}
 }
 function addHutang(kind){var name=prompt(kind=='bank'?'Nama Bank:':'Nama Teman:');if(!name)return;var total=Number(prompt('Total:','1000000')||0);var sisa=Number(prompt('Sisa sekarang:',total)||0);var tenor=prompt('Tenor bulan:','12')||'';var cicilan=Number(prompt('Cicilan / bulan:','0')||0);var jatuh=prompt('Jatuh Tempo (YYYY-MM-DD, kosongin kalau ngga ada):','')||'';var ket=prompt('Keterangan:','')||'';var obj={id:'H'+Date.now(),name:name,total:total,sisa:sisa,tenor:tenor,cicilan:cicilan,jatuh:jatuh,ket:ket,kind:kind};hutangs.push(obj);saveLocalOnly();syncOne('hutang',obj.id,obj);renderHutang();}
-function editHutang(id){var x=hutangs.find(function(v){return v.id==id});if(!x)return;var name=prompt('Nama:',x.name);if(name===null)return;var total=Number(prompt('Total Awal:',x.total)||0);var sisa=Number(prompt('Sisa Sekarang:',x.sisa)||0);var tenor=prompt('Tenor bulan:',x.tenor||'')||'';var cicilan=Number(prompt('Cicilan / bulan:',x.cicilan||0)||0);var jatuh=prompt('Jatuh Tempo (YYYY-MM-DD):',x.jatuh||'')||'';var ket=prompt('Keterangan:',x.ket||'')||'';x.name=name;x.total=total;x.sisa=sisa;x.tenor=tenor;x.cicilan=cicilan;x.jatuh=jatuh;x.ket=ket;if(x.sisa===0&&confirm('Sisa 0 = LUNAS. Hapus dari list?')){hutangs=hutangs.filter(function(v){return v.id!=id});syncOne('hutang',id,null,true);}else syncOne('hutang',id,x);saveLocalOnly();renderHutang();}
+function editHutang(id){
+  var x=hutangs.find(function(v){return String(v.id)==String(id)});
+  if(!x) return alert('Hutang ga ketemu: '+id);
+  var isi=[x.name||'',x.total||0,x.sisa||0,x.tenor||'',x.cicilan||0,x.jatuh||'',x.ket||''].join(' | ');
+  var baru=prompt('Edit (pisahin pake |):\nNama | Total | Sisa | Tenor | Cicilan | Jatuh YYYY-MM-DD | Ket',isi);
+  if(baru===null) return;
+  var p=baru.split('|');
+  if(p.length<3) return alert('Format salah. Contoh: BRI | 5000000 | 2000000 | 12 | 500000 | 2026-12-01 | Pinjaman');
+  x.name=(p[0]||x.name).trim();
+  x.total=Number((p[1]||x.total).toString().replace(/[^0-9]/g,''))||0;
+  x.sisa=Number((p[2]||x.sisa).toString().replace(/[^0-9]/g,''))||0;
+  x.tenor=(p[3]||x.tenor||'').trim();
+  x.cicilan=Number((p[4]||x.cicilan||0).toString().replace(/[^0-9]/g,''))||0;
+  x.jatuh=(p[5]||x.jatuh||'').trim();
+  x.ket=(p[6]||x.ket||'').trim();
+  if(x.sisa===0 && confirm('Sisa 0 = LUNAS. Hapus dari list?')){
+    hutangs=hutangs.filter(function(v){return String(v.id)!=String(id)});
+    syncOne('hutang',id,null,true);
+  } else {
+    syncOne('hutang',id,x);
+  }
+  saveLocalOnly(); renderHutang();
+  alert('Beres, hutang udah ke-update.');
+}
 function delHutang(id){if(!confirm('Hapus hutang ini?'))return;hutangs=hutangs.filter(function(v){return v.id!=id});saveLocalOnly();syncOne('hutang',id,null,true);renderHutang();}
 function bayarHutang(id){var x=hutangs.find(function(v){return v.id==id});if(!x)return;var amt=Number(prompt('Bayar berapa? Cicilan '+x.cicilan,x.cicilan)||0);if(!amt)return;x.sisa=Math.max(0,Number(x.sisa||0)-amt);var d={id:'L'+Date.now(),cat:'Bayar Hutang',amount:amt,wallet:wallets[0]?wallets[0].name:'Cash',type:'keluar',t:Date.now()};txs.unshift(d);syncOne('tx',d.id,d);if(x.sisa===0){alert('Hutang LUNAS!');hutangs=hutangs.filter(function(v){return v.id!=id});syncOne('hutang',id,null,true);}else syncOne('hutang',id,x);saveLocalOnly();render();renderHutang();}
 function renderTagihan(){try{var h='';tagihans.slice().sort(function(a,b){var s=function(x){return x.status=='Terlewat'?0:x.status=='Belum'?1:2};return s(a)-s(b)}).forEach(function(t){h+='<div style="border:1px solid #fecaca;padding:10px;border-radius:12px;margin:6px 0"><b>'+t.name+'</b><div style="font-size:12px">'+fmt(t.amt)+' • '+t.status+' • '+t.date+'</div><div style="display:flex;gap:6px;margin-top:6px"><button class="btn btnG" onclick="bayarTagihan(\''+t.id+'\')">Bayar</button><button class="btn btnG" onclick="delTagihan(\''+t.id+'\')">Hapus</button></div></div>'});$('tagihanList').innerHTML=h||'Belum ada'}catch(e){}}

@@ -307,7 +307,31 @@ function pilihAkun(roomId,nama){
 }
 setTimeout(function(){ if(!localStorage.getItem('loginName')) loadAkunList(); },1500);
 // === AKHIR TAMBAHAN ===
+// === FIX AMBIL - PASTI JALAN ===
+function tarikNabung(id){
+  alert('Tombol Ambil kepencet: '+id);
+  var n=null;
+  for(var i=0;i<nabungs.length;i++){ if(String(nabungs[i].id)==String(id)){ n=nabungs[i]; break; } }
+  if(!n) return alert('Tabungan ga ketemu: '+id);
+  var isi=Number(n.have||0);
+  if(isi<=0) return alert('Tabungan '+n.name+' masih 0, isi dulu pakai + Nabung');
+  var a=Number(prompt('Ambil berapa dari '+n.name+'?\nIsi sekarang: '+fmt(isi),isi)||0);
+  if(!a) return;
+  if(a>isi) return alert('Ngga bisa, isinya cuma '+fmt(isi));
+  n.have=isi-a;
+  var dompet=wallets[0]?wallets[0].name:'Cash';
+  var d={id:'L'+Date.now(),cat:'Ambil Tabungan - '+n.name,amount:a,wallet:dompet,type:'masuk',t:Date.now()};
+  txs.unshift(d);
+  saveLocalOnly();
+  syncOne('nabung',id,n);
+  syncOne('tx',d.id,d);
+  render();renderNabung();
+  alert('Beres, '+fmt(a)+' udah balik ke '+dompet);
+}
+// === AKHIR FIX ===
 
+render();
+</script>
 render();
 </script>
 <div id="loginScreen" style="position:fixed;inset:0;background:#991b1b;z-index:100;display:flex;align-items:center;justify-content:center;padding:20px">

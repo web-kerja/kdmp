@@ -383,7 +383,16 @@ function tarikNabung(id){
 }
 function delNabung(id){ if(!confirm('Hapus target ini?')) return; nabungs=nabungs.filter(function(v){return String(v.id)!=String(id)}); saveLocalOnly(); syncOne('nabung',id,null,true); renderNabung(); }
 // === AKHIR FIX ===
-
+// === FIX URUTAN LOG - BARU KE LAMA ===
+(function(){
+  var _oldRender = render;
+  render = function(){
+    try{ txs.sort(function(a,b){ return (b.t||0)-(a.t||0); }); }catch(e){}
+    _oldRender();
+  };
+  try{ txs.sort(function(a,b){ return (b.t||0)-(a.t||0); }); }catch(e){}
+})();
+// === AKHIR FIX URUTAN ===
 render();
 </script>
 <div id="loginScreen" style="position:fixed;inset:0;background:#991b1b;z-index:100;display:flex;align-items:center;justify-content:center;padding:20px">
@@ -395,4 +404,3 @@ render();
 <button class="btn btnG" style="width:100%;margin-top:8px" onclick="loadAkunList()">Refresh Daftar</button>
 </div></div>
 </body></html>
-  

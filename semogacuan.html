@@ -70,24 +70,28 @@ saveAccs();
 var room=curAcc;
 var txs=[],wallets=[],hutangs=[],tagihans=[],budgets=[],nabungs=[],cats=[],bagiSaved=[],editingId=null,catMode='keluar',anMode='bulan',uid=null,db=null;
 function K(k){return k+'_'+room}
-function createAcc(){alert('Bikin kamar baru sudah dimatikan. Pakai nama akun yang sudah ada.')}
 function logoutAcc(){if(!confirm('Logout?'))return;localStorage.removeItem('loginName');localStorage.removeItem('curAcc');location.reload()}
-async function doLogin(){
-  var nama=$('loginName').value.trim();
-  if(!nama) return $('loginMsg').innerText='Isi nama akun dulu';
-  $('loginMsg').innerText='Cari nama di Firebase...';
+async function loadAkunList(){
   try{
-    var q=await db.collection('codes').where('name','==',nama).get();
-    if(q.empty){
-      var all=await db.collection('codes').get();var ketemu=null;
-      all.forEach(function(d){var dt=d.data();if(dt.name && dt.name.toLowerCase()===nama.toLowerCase()) ketemu=dt;});
-      if(!ketemu) return $('loginMsg').innerText='Nama "'+nama+'" ngga ketemu di Firebase.';
-      var roomId=ketemu.room;
-      accs=[{id:roomId,name:nama}];curAcc=roomId;room=roomId;localStorage.setItem('loginName',nama);saveAccs();$('loginScreen').style.display='none';location.reload();return;
-    }
-    var data=q.docs[0].data();var roomId2=data.room;
-    accs=[{id:roomId2,name:nama}];curAcc=roomId2;room=roomId2;localStorage.setItem('loginName',nama);saveAccs();$('loginScreen').style.display='none';location.reload();
-  }catch(e){$('loginMsg').innerText='Gagal: '+e.message}
+    if(!$('akunList')) return;
+    $('akunList').innerHTML='Loading akun...';
+    var all=await db.collection('codes').get();
+    if(all.empty){$('akunList').innerHTML='Belum ada akun di Firebase';return;}
+    var h='';
+    all.forEach(function(d){
+      var dt=d.data();
+      var nama=dt.name || d.id;
+      var roomId=dt.room || '';
+      h+='<button class="btn btnP" style="width:100%;margin:4px 0;text-align:left" onclick="pilihAkun(\''+roomId+'\',\''+nama+'\')">👤 '+nama+'<div style="font-size:11px;opacity:.7">Kode: '+d.id+'</div></button>';
+    });
+    $('akunList').innerHTML=h;
+  }catch(e){ if($('akunList')) $('akunList').innerHTML='Gagal load: '+e.message; }
+}
+function pilihAkun(roomId,nama){
+  if(!roomId) return alert('Room kosong di Firebase');
+  accs=[{id:roomId,name:nama}];curAcc=roomId;room=roomId;
+  localStorage.setItem('loginName',nama);saveAccs();
+  $('loginScreen').style.display='none';location.reload();
 }
 function checkLogin(){var s=localStorage.getItem('loginName');if(!s){$('loginScreen').style.display='flex'}else{$('loginScreen').style.display='none'}}
 setTimeout(checkLogin,500);
@@ -261,15 +265,44 @@ try{
   db=firebase.firestore();
   firebase.auth().signInAnonymously().then(function(u){uid=u.user.uid;setSync(true,'Sudah Sync ✓');syncFromFirebase(false)}).catch(function(e){setSync(false,'Mode Lokal - '+e.message)});
 }catch(e){setSync(false,'Mode Lokal')}
+// === TAMBAHAN PILIH AKUN ===
+async function loadAkunList(){
+  try{
+    if(!$('akunList')) return;
+    $('akunList').innerHTML='Loading akun...';
+    var all=await db.collection('codes').get();
+    if(all.empty){$('akunList').innerHTML='Belum ada akun di Firebase';return;}
+    var h='';
+    all.forEach(function(d){
+      var dt=d.data();
+      var nama=dt.name || d.id;
+      var roomId=dt.room || '';
+      h+='<button class="btn btnP" style="width:100%;margin:4px 0;text-align:left" onclick="pilihAkun(\''+roomId+'\',\''+nama+'\')">👤 '+nama+'<div style="font-size:11px;opacity:.7">Kode: '+d.id+'</div></button>';
+    });
+    $('akunList').innerHTML=h;
+  }catch(e){ if($('akunList')) $('akunList').innerHTML='Gagal load: '+e.message; }
+}
+function pilihAkun(roomId,nama){
+  if(!roomId) return alert('Room kosong di Firebase');
+  accs=[{id:roomId,name:nama}];curAcc=roomId;room=roomId;
+  localStorage.setItem('loginName',nama);saveAccs();
+  $('loginScreen').style.display='none';location.reload();
+}
+setTimeout(function(){ if(!localStorage.getItem('loginName')) loadAkunList(); },1500);
+// === AKHIR TAMBAHAN ===
+
+render();
+</script>
+  
 render();
 </script>
 <div id="loginScreen" style="position:fixed;inset:0;background:#991b1b;z-index:100;display:flex;align-items:center;justify-content:center;padding:20px">
 <div style="background:#fff;width:100%;max-width:360px;border-radius:18px;padding:20px;text-align:center">
 <h2 style="color:#991b1b">CatatDuit MERAH</h2>
-<p style="font-size:12px;opacity:.6">Masuk pake Nama Akun</p>
-<input id="loginName" class="inp" placeholder="Nama Akun: Warung">
-<button class="btn btnP" style="width:100%" onclick="doLogin()">Masuk</button>
+<p style="font-size:12px;opacity:.6">Pilih akun mau masuk yang mana</p>
+<div id="akunList" style="margin-top:10px;text-align:left">Loading akun...</div>
 <div id="loginMsg" style="font-size:12px;color:#dc2626;margin-top:8px"></div>
+<button class="btn btnG" style="width:100%;margin-top:8px" onclick="loadAkunList()">Refresh Daftar</button>
 </div></div>
 </body></html>
   

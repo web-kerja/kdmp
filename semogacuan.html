@@ -50,7 +50,7 @@ nav button.active{background:#dc2626;color:#fff}
 <div id="tabAnalisis" class="tab"><div class="card"><b>📈 Analisis</b><div style="display:flex;gap:6px;margin:6px 0"><button class="btn btnG" onclick="setAn('bulan')">Bulan Ini</button><button class="btn btnG" onclick="setAn('all')">All Time</button></div><canvas id="chart" width="320" height="120" style="background:#fff7ed;border-radius:10px;width:100%"></canvas><div id="analisisList"></div></div></div>
 <div id="tabKonsul" class="tab"><div class="card"><b>💰 Bagi Gaji + AI Konsul</b><input id="gajiIn" class="inp" type="number" placeholder="Gaji: 5000000"><input id="gajiKet" class="inp" placeholder="Keterangan: Gajian tgl 25"><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px"><div>Jajan%<input id="pJajan" class="inp" type="number" value="20"></div><div>Nabung%<input id="pNabung" class="inp" type="number" value="30"></div><div>Hutang%<input id="pHutang" class="inp" type="number" value="20"></div><div>Tagihan%<input id="pTagih" class="inp" type="number" value="20"></div><div>Darurat%<input id="pDar" class="inp" type="number" value="10"></div></div><button class="btn btnP" style="width:100%" onclick="bagiGaji()">🔥 Bagi & Konsul AI</button><div id="bagiHasil" style="margin-top:8px;font-size:12px"></div><button class="btn btnG" style="width:100%;margin-top:6px" onclick="saveBagi()">💾 Simpan</button><div id="bagiSaved" style="font-size:12px;margin-top:6px"></div><div style="background:#fef3c7;padding:8px;border-radius:10px;margin-top:8px;font-size:12px"><b>🤖 AI Konsul</b><div id="konsulBox">-</div></div></div></div>
 <div id="tabTanya" class="tab"><div class="card"><b>🛒 Tanya Beli Level 1-5</b><input id="tanyaQ" class="inp" placeholder="Mau beli apa?"><input id="tanyaHarga" class="inp" type="number" placeholder="Harga"><input id="tanyaAlasan" class="inp" placeholder="Alasan"><select id="tanyaL" class="inp"><option value="1">1 Butuh Banget</option><option value="2">2 Butuh</option><option value="3">3 Lumayan</option><option value="4">4 Pengen</option><option value="5">5 Nafsu</option></select><button class="btn btnP" style="width:100%" onclick="cekTanya()">Cek Boleh?</button><div id="tanyaAns" style="font-size:12px;margin-top:6px"></div></div></div>
-<div id="tabSetting" class="tab"><div class="card"><b>👥 Akun / Kamar</b><div id="accList"></div><div style="display:flex;gap:6px"><input id="newAcc" class="inp" placeholder="Nama baru: Warung" style="flex:1"><button class="btn btnP" onclick="createAcc()">+</button></div><div style="font-size:11px;margin-top:6px">Pindah kamar = narik dari cloud kamar itu. Jangan buat kamar baru kalau belum sync.</div></div><div class="card"><b>☁️ Cloud</b><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn btnP" style="flex:1" onclick="syncFromFirebase(true)">Tarik dari Cloud</button><button class="btn btnG" style="flex:1" onclick="syncToFirebase()">Kirim ke Cloud</button></div><div style="font-size:11px;margin-top:6px">Kalau saldo masih salah, klik Tarik dari Cloud 1x, tunggu sampai Sudah Sync.</div></div><div class="card"><b>💾 Data</b><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn btnG" onclick="exportJSON()">Export JSON</button><button class="btn btnG" onclick="window.print()">🖨️ Print</button></div><div style="font-size:11px;margin-top:8px">ID: <span id="roomId2">-</span> • <span id="fbStat">-</span><br>JANGAN pakai Reset / Clear, itu yang hapus semua kemarin.</div></div></div>
+<div id="tabSetting" class="tab"><div class="card"><b>👥 Akun / Kamar</b><div id="accList"></div><div style="display:flex;gap:6px"><button class="btn btnP" style="flex:1" onclick="logoutAcc()">Logout / Ganti Akun</button></div><div style="font-size:11px;margin-top:6px">Pindah kamar = narik dari cloud kamar itu. Jangan buat kamar baru kalau belum sync.</div></div><div class="card"><b>☁️ Cloud</b><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn btnP" style="flex:1" onclick="syncFromFirebase(true)">Tarik dari Cloud</button><button class="btn btnG" style="flex:1" onclick="syncToFirebase()">Kirim ke Cloud</button></div><div style="font-size:11px;margin-top:6px">Kalau saldo masih salah, klik Tarik dari Cloud 1x, tunggu sampai Sudah Sync.</div></div><div class="card"><b>💾 Data</b><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn btnG" onclick="exportJSON()">Export JSON</button><button class="btn btnG" onclick="window.print()">🖨️ Print</button></div><div style="font-size:11px;margin-top:8px">ID: <span id="roomId2">-</span> • <span id="fbStat">-</span><br>JANGAN pakai Reset / Clear, itu yang hapus semua kemarin.</div></div></div>
 <button class="fab" onclick="openForm()">+</button>
 <div id="mForm" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:50;align-items:end"><div style="background:#fff;width:100%;border-radius:18px 18px 0 0;padding:14px"><h3 id="fTitle">Tambah</h3><select id="fCat" class="inp"></select><input id="fAmt" class="inp" type="number" placeholder="Jumlah"><select id="fWallet" class="inp"></select><select id="fType" class="inp" onchange="onType()"><option value="keluar">Keluar</option><option value="masuk">Masuk</option><option value="pindah">Pindah Dompet</option><option value="nabung">Nabung (link Target)</option><option value="hutang">Bayar Hutang (link)</option><option value="tagihan">Bayar Tagihan (link)</option></select><select id="fWallet2" class="inp" style="display:none"></select><select id="fLink" class="inp" style="display:none"></select><div style="display:flex;gap:6px"><button class="btn btnP" style="flex:1" onclick="saveTx()">Simpan</button><button class="btn btnG" style="flex:1" onclick="closeForm()">Batal</button></div><div id="fAct" style="display:none;margin-top:6px"><button class="btn" style="width:100%;background:#fee2e2;color:#dc2626" onclick="delTx()">Hapus</button></div></div></div>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
@@ -63,13 +63,35 @@ function fmt(n){return 'Rp '+(n||0).toLocaleString('id-ID')}
 function setSync(ok,txt){try{$('syncDot').className='dot '+(ok?'on':'off');$('syncTxt').innerText=txt;$('fbStat').innerText=txt}catch(e){}}
 var accs=[];try{accs=JSON.parse(localStorage.getItem('accs')||'[]')}catch(e){accs=[]}
 var curAcc=localStorage.getItem('curAcc')||'';
-if(accs.length==0){var nid='room_'+Date.now();accs=[{id:nid,name:'Akun Saya'}];curAcc=nid}
+if(accs.length==0){accs=[{id:'room_belum_login',name:'Belum Login'}];curAcc='room_belum_login'}
 if(!curAcc||!accs.find(function(a){return a.id==curAcc})){curAcc=accs[0].id}
 function saveAccs(){localStorage.setItem('accs',JSON.stringify(accs));localStorage.setItem('curAcc',curAcc)}
 saveAccs();
 var room=curAcc;
 var txs=[],wallets=[],hutangs=[],tagihans=[],budgets=[],nabungs=[],cats=[],bagiSaved=[],editingId=null,catMode='keluar',anMode='bulan',uid=null,db=null;
 function K(k){return k+'_'+room}
+function createAcc(){alert('Bikin kamar baru sudah dimatikan. Pakai nama akun yang sudah ada.')}
+function logoutAcc(){if(!confirm('Logout?'))return;localStorage.removeItem('loginName');localStorage.removeItem('curAcc');location.reload()}
+async function doLogin(){
+  var nama=$('loginName').value.trim();
+  if(!nama) return $('loginMsg').innerText='Isi nama akun dulu';
+  $('loginMsg').innerText='Cari nama di Firebase...';
+  try{
+    var q=await db.collection('codes').where('name','==',nama).get();
+    if(q.empty){
+      var all=await db.collection('codes').get();var ketemu=null;
+      all.forEach(function(d){var dt=d.data();if(dt.name && dt.name.toLowerCase()===nama.toLowerCase()) ketemu=dt;});
+      if(!ketemu) return $('loginMsg').innerText='Nama "'+nama+'" ngga ketemu di Firebase.';
+      var roomId=ketemu.room;
+      accs=[{id:roomId,name:nama}];curAcc=roomId;room=roomId;localStorage.setItem('loginName',nama);saveAccs();$('loginScreen').style.display='none';location.reload();return;
+    }
+    var data=q.docs[0].data();var roomId2=data.room;
+    accs=[{id:roomId2,name:nama}];curAcc=roomId2;room=roomId2;localStorage.setItem('loginName',nama);saveAccs();$('loginScreen').style.display='none';location.reload();
+  }catch(e){$('loginMsg').innerText='Gagal: '+e.message}
+}
+function checkLogin(){var s=localStorage.getItem('loginName');if(!s){$('loginScreen').style.display='flex'}else{$('loginScreen').style.display='none'}}
+setTimeout(checkLogin,500);
+  
 function loadLocalOnly(){
   try{txs=JSON.parse(localStorage.getItem(K('oldTx'))||'[]')}catch(e){txs=[]}
   try{wallets=JSON.parse(localStorage.getItem(K('localWallets'))||'[]')}catch(e){wallets=[]}
@@ -240,5 +262,14 @@ try{
   firebase.auth().signInAnonymously().then(function(u){uid=u.user.uid;setSync(true,'Sudah Sync ✓');syncFromFirebase(false)}).catch(function(e){setSync(false,'Mode Lokal - '+e.message)});
 }catch(e){setSync(false,'Mode Lokal')}
 render();
-</script></body></html>
+</script>
+<div id="loginScreen" style="position:fixed;inset:0;background:#991b1b;z-index:100;display:flex;align-items:center;justify-content:center;padding:20px">
+<div style="background:#fff;width:100%;max-width:360px;border-radius:18px;padding:20px;text-align:center">
+<h2 style="color:#991b1b">CatatDuit MERAH</h2>
+<p style="font-size:12px;opacity:.6">Masuk pake Nama Akun</p>
+<input id="loginName" class="inp" placeholder="Nama Akun: Warung">
+<button class="btn btnP" style="width:100%" onclick="doLogin()">Masuk</button>
+<div id="loginMsg" style="font-size:12px;color:#dc2626;margin-top:8px"></div>
+</div></div>
+</body></html>
   

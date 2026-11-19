@@ -48,8 +48,7 @@ nav button.active{background:#dc2626;color:#fff}
 <div id="tabBudget" class="tab"><div class="card"><b>📊 Budget</b><div id="budgetList"></div><div style="display:flex;gap:6px"><input id="bCat" class="inp" placeholder="Nama Budget" style="flex:1"><input id="bAmt" class="inp" type="number" placeholder="Limit" style="flex:1"><button class="btn btnP" onclick="saveBudget()">+</button></div><div id="aiBudget" style="font-size:12px;margin-top:6px"></div></div></div>
 <div id="tabNabung" class="tab"><div class="card"><b>🎯 Nabung</b><button class="btn btnP" style="float:right" onclick="addNabung()">+ Target</button><div style="clear:both"></div><div id="nabungList"></div></div></div>
 <div id="tabAnalisis" class="tab"><div class="card"><b>📈 Analisis</b><div style="display:flex;gap:6px;margin:6px 0"><button class="btn btnG" onclick="setAn('bulan')">Bulan Ini</button><button class="btn btnG" onclick="setAn('all')">All Time</button></div><canvas id="chart" width="320" height="120" style="background:#fff7ed;border-radius:10px;width:100%"></canvas><div id="analisisList"></div></div></div>
-<div id="tabKonsul" class="tab"><div class="card"><b>💰 Bagi Gaji + AI Konsul</b><input id="gajiIn" class="inp" type="number" placeholder="Gaji: 5000000"><input id="gajiKet" class="inp" placeholder="Keterangan: Gajian tgl 25"><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px"><div>Jajan%<input id="pJajan" class="inp" type="number" value="20"></div><div>Nabung%<input id="pNabung" class="inp" type="number" value="30"></div><div>Hutang%<input id="pHutang" class="inp" type="number" value="20"></div><div>Tagihan%<input id="pTagih" class="inp" type="number" value="20"></div><div>Darurat%<input id="pDar" class="inp" type="number" value="10"></div></div><button class="btn btnP" style="width:100%" onclick="bagiGaji()">🔥 Bagi & Konsul AI</button><div id="bagiHasil" style="margin-top:8px;font-size:12px"></div><button class="btn btnG" style="width:100%;margin-top:6px" onclick="saveBagi()">💾 Simpan</button><div id="bagiSaved" style="font-size:12px;margin-top:6px"></div><div style="background:#fef3c7;padding:8px;border-radius:10px;margin-top:8px;font-size:12px"><b>🤖 AI Konsul</b><div id="konsulBox">-</div></div></div></div>
-<div id="tabTanya" class="tab"><div class="card"><b>🛒 Tanya Beli Level 1-5</b><input id="tanyaQ" class="inp" placeholder="Mau beli apa?"><input id="tanyaHarga" class="inp" type="number" placeholder="Harga"><input id="tanyaAlasan" class="inp" placeholder="Alasan"><select id="tanyaL" class="inp"><option value="1">1 Butuh Banget</option><option value="2">2 Butuh</option><option value="3">3 Lumayan</option><option value="4">4 Pengen</option><option value="5">5 Nafsu</option></select><button class="btn btnP" style="width:100%" onclick="cekTanya()">Cek Boleh?</button><div id="tanyaAns" style="font-size:12px;margin-top:6px"></div></div></div>
+<div id="tabKonsul" class="tab"><div class="card"><b>💰 Bagi Uang + AI Konsul</b><input id="gajiIn" class="inp" type="number" placeholder="Nominal uang yang mau diatur: 3700000" oninput="updateBagiCalc()"><input id="gajiKet" class="inp" placeholder="Keterangan: Gajian tgl 2 Desember, ada hutang..."><div id="bagiSisaBox" style="background:#fef3c7;padding:10px;border-radius:10px;font-weight:800;margin:6px 0">Sisa: Rp 0 • Terpakai: 0%</div><div style="font-size:11px;opacity:.6">Isi jenis + nominalnya. % otomatis kehitung. Sisa harus 0 biar pas.</div><div id="bagiRows" style="margin-top:6px"></div><button class="btn btnG" style="width:100%;margin-top:6px" onclick="addBagiRow()">+ Tambah Jenis</button><button class="btn btnP" style="width:100%;margin-top:6px" onclick="bagiGaji()">🔥 Bagi & Konsul AI</button><div id="bagiHasil" style="margin-top:8px;font-size:12px"></div><button class="btn btnG" style="width:100%;margin-top:6px" onclick="saveBagi()">💾 Simpan</button><div id="bagiSaved" style="font-size:12px;margin-top:6px"></div><div style="background:#fef3c7;padding:8px;border-radius:10px;margin-top:8px;font-size:12px"><b>🤖 AI Konsul</b><div id="konsulBox">-</div></div></div></div><div id="tabTanya" class="tab"><div class="card"><b>🛒 Tanya Beli Level 1-5</b><input id="tanyaQ" class="inp" placeholder="Mau beli apa?"><input id="tanyaHarga" class="inp" type="number" placeholder="Harga"><input id="tanyaAlasan" class="inp" placeholder="Alasan"><select id="tanyaL" class="inp"><option value="1">1 Butuh Banget</option><option value="2">2 Butuh</option><option value="3">3 Lumayan</option><option value="4">4 Pengen</option><option value="5">5 Nafsu</option></select><button class="btn btnP" style="width:100%" onclick="cekTanya()">Cek Boleh?</button><div id="tanyaAns" style="font-size:12px;margin-top:6px"></div></div></div>
 <div id="tabSetting" class="tab"><div class="card"><b>👥 Akun / Kamar</b><div id="accList"></div><div style="display:flex;gap:6px"><button class="btn btnP" style="flex:1" onclick="logoutAcc()">Logout / Ganti Akun</button></div><div style="font-size:11px;margin-top:6px">Pindah kamar = narik dari cloud kamar itu. Jangan buat kamar baru kalau belum sync.</div></div><div class="card"><b>☁️ Cloud</b><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn btnP" style="flex:1" onclick="syncFromFirebase(true)">Tarik dari Cloud</button><button class="btn btnG" style="flex:1" onclick="syncToFirebase()">Kirim ke Cloud</button></div><div style="font-size:11px;margin-top:6px">Kalau saldo masih salah, klik Tarik dari Cloud 1x, tunggu sampai Sudah Sync.</div></div><div class="card"><b>💾 Data</b><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn btnG" onclick="exportJSON()">Export JSON</button><button class="btn btnG" onclick="window.print()">🖨️ Print</button></div><div style="font-size:11px;margin-top:8px">ID: <span id="roomId2">-</span> • <span id="fbStat">-</span><br>JANGAN pakai Reset / Clear, itu yang hapus semua kemarin.</div></div></div>
 <button class="fab" onclick="openForm()">+</button>
 <div id="mForm" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:50;align-items:end"><div style="background:#fff;width:100%;border-radius:18px 18px 0 0;padding:14px"><h3 id="fTitle">Tambah</h3><select id="fCat" class="inp"></select><input id="fAmt" class="inp" type="number" placeholder="Jumlah"><select id="fWallet" class="inp"></select><select id="fType" class="inp" onchange="onType()"><option value="keluar">Keluar</option><option value="masuk">Masuk</option><option value="pindah">Pindah Dompet</option><option value="nabung">Nabung (link Target)</option><option value="hutang">Bayar Hutang (link)</option><option value="tagihan">Bayar Tagihan (link)</option></select><select id="fWallet2" class="inp" style="display:none"></select><select id="fLink" class="inp" style="display:none"></select><div style="display:flex;gap:6px"><button class="btn btnP" style="flex:1" onclick="saveTx()">Simpan</button><button class="btn btnG" style="flex:1" onclick="closeForm()">Batal</button></div><div id="fAct" style="display:none;margin-top:6px"><button class="btn" style="width:100%;background:#fee2e2;color:#dc2626" onclick="delTx()">Hapus</button></div></div></div>
@@ -393,6 +392,68 @@ function delNabung(id){ if(!confirm('Hapus target ini?')) return; nabungs=nabung
   try{ txs.sort(function(a,b){ return (b.t||0)-(a.t||0); }); }catch(e){}
 })();
 // === AKHIR FIX URUTAN ===
+// === BAGI GAJI BARU - ISI NOMINAL, % OTOMATIS ===
+var bagiRowsData=[{nama:'Hutang',amt:0},{nama:'Nabung',amt:0},{nama:'Jajan',amt:0},{nama:'Tagihan',amt:0}];
+function addBagiRow(){ bagiRowsData.push({nama:'',amt:0}); renderBagiRows(); }
+function renderBagiRows(){
+  if(!$('bagiRows')) return;
+  var h='';
+  bagiRowsData.forEach(function(r,i){
+    h+='<div style="display:flex;gap:6px;margin:4px 0"><input class="inp" style="flex:1;margin:0" placeholder="Jenis: Hutang / Gadget" value="'+(r.nama||'')+'" oninput="bagiRowsData['+i+'].nama=this.value;updateBagiCalc()"><input class="inp" style="flex:1;margin:0" type="number" placeholder="Nominal" value="'+(r.amt||'')+'" oninput="bagiRowsData['+i+'].amt=Number(this.value||0);updateBagiCalc()"><button class="btn btnG" onclick="bagiRowsData.splice('+i+',1);renderBagiRows()">X</button></div>';
+  });
+  $('bagiRows').innerHTML=h; updateBagiCalc();
+}
+function updateBagiCalc(){
+  if(!$('gajiIn')||!$('bagiSisaBox')) return {total:0,pakai:0,sisa:0};
+  var total=Number($('gajiIn').value||0);
+  var pakai=0; bagiRowsData.forEach(function(r){ pakai+=Number(r.amt||0); });
+  var sisa=total-pakai;
+  var persen=total?Math.round(pakai/total*100):0;
+  var warna=sisa<0?'#fee2e2':sisa==0&&total>0?'#dcfce7':'#fef3c7';
+  var txtSisa=sisa<0?'MINUS '+fmt(Math.abs(sisa))+' - KELEBIHAN!':sisa==0&&total>0?'PAS! Sisa Rp 0':'Sisa: '+fmt(sisa);
+  $('bagiSisaBox').style.background=warna;
+  $('bagiSisaBox').innerHTML=txtSisa+' • Terpakai: '+persen+'% • Total: '+fmt(total);
+  return {total:total,pakai:pakai,sisa:sisa,persen:persen};
+}
+function bagiGaji(){
+  var c=updateBagiCalc();
+  if(!c.total) return alert('Isi dulu nominal uangnya');
+  if(c.sisa<0) return alert('Kelebihan '+fmt(Math.abs(c.sisa))+', kurangi salah satu jenisnya');
+  var html='';
+  bagiRowsData.forEach(function(r){
+    if(!r.nama||!r.amt) return;
+    var p=c.total?Math.round(Number(r.amt)/c.total*100):0;
+    html+='<div>'+r.nama+' '+fmt(r.amt)+' • '+p+'%<div class="prog"><div style="width:'+Math.min(p,100)+'%"></div></div></div>';
+  });
+  if(c.sisa>0) html+='<div><b>Sisa belum dibagi: '+fmt(c.sisa)+' ('+Math.round(c.sisa/c.total*100)+'%)</b></div>';
+  $('bagiHasil').innerHTML=html;
+  var nabung=0,jajan=0,hutang=0;
+  bagiRowsData.forEach(function(r){ var nm=(r.nama||'').toLowerCase(); if(nm.indexOf('nabung')>=0) nabung+=Number(r.amt||0); if(nm.indexOf('jajan')>=0||nm.indexOf('gadget')>=0) jajan+=Number(r.amt||0); if(nm.indexOf('hutang')>=0) hutang+=Number(r.amt||0); });
+  var komen='';
+  if(c.sisa>0) komen+='Masih ada sisa '+fmt(c.sisa)+' belum dibagi. ';
+  if(c.sisa==0) komen+='Pas! Semua uang udah ada jatahnya. ';
+  if(hutang/c.total>0.4) komen+='Hutangmu '+Math.round(hutang/c.total*100)+'% - kegedean, utamain lunasin hutang dulu sebelum jajan. ';
+  else if(hutang>0) komen+='Bagus, hutang udah disisihin '+fmt(hutang)+'. ';
+  if(nabung/c.total<0.1) komen+='Nabungmu cuma '+Math.round(nabung/c.total*100)+'%, kekecilan. Usahain minimal 10-20%. ';
+  else if(nabung>0) komen+='Nabung '+Math.round(nabung/c.total*100)+'% udah aman. ';
+  if(jajan/c.total>0.3) komen+='Jajan '+Math.round(jajan/c.total*100)+'% kebanyakan, rem dulu. ';
+  if(!hutang && !nabung) komen+='Belum ada jatah Hutang / Nabung, coba tambahin dulu biar aman.';
+  $('konsulBox').innerHTML=komen||'Udah oke.';
+  window._lastBagi={gaji:c.total,date:new Date().toISOString().slice(0,10),saran:html,ket:$('gajiKet').value||'',rows:JSON.parse(JSON.stringify(bagiRowsData))};
+}
+function saveBagi(){
+  if(!window._lastBagi) return alert('Klik Bagi & Konsul AI dulu');
+  bagiSaved.push(window._lastBagi); saveLocalOnly(); renderKonsul(); alert('Disimpan!');
+}
+function renderKonsul(){
+  try{
+    var h=''; bagiSaved.forEach(function(x){ h+='<div style="border:1px solid #fee2e2;padding:8px;border-radius:10px;margin:4px 0"><b>'+x.date+' • '+(x.ket||'Bagi Uang')+'</b><br>Total '+fmt(x.gaji)+'<br>'+(x.saran||'')+'</div>'; });
+    if($('bagiSaved')) $('bagiSaved').innerHTML=h||'Belum ada';
+    if($('bagiRows')) renderBagiRows();
+  }catch(e){}
+}
+// === AKHIR BAGI GAJI BARU ===
+
 render();
 </script>
 <div id="loginScreen" style="position:fixed;inset:0;background:#991b1b;z-index:100;display:flex;align-items:center;justify-content:center;padding:20px">

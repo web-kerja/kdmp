@@ -51,7 +51,7 @@ nav button.active{background:#dc2626;color:#fff}
 <div id="tabKonsul" class="tab"><div class="card"><b>💰 Bagi Uang + AI Konsul</b><input id="gajiIn" class="inp" type="number" placeholder="Nominal uang yang mau diatur: 3700000" oninput="updateBagiCalc()"><input id="gajiKet" class="inp" placeholder="Keterangan: Gajian tgl 2 Desember, ada hutang..."><div id="bagiSisaBox" style="background:#fef3c7;padding:10px;border-radius:10px;font-weight:800;margin:6px 0">Sisa: Rp 0 • Terpakai: 0%</div><div style="font-size:11px;opacity:.6">Isi jenis + nominalnya. % otomatis kehitung. Sisa harus 0 biar pas.</div><div id="bagiRows" style="margin-top:6px"></div><button class="btn btnG" style="width:100%;margin-top:6px" onclick="addBagiRow()">+ Tambah Jenis</button><button class="btn btnP" style="width:100%;margin-top:6px" onclick="bagiGaji()">🔥 Bagi & Konsul AI</button><div id="bagiHasil" style="margin-top:8px;font-size:12px"></div><button class="btn btnG" style="width:100%;margin-top:6px" onclick="saveBagi()">💾 Simpan</button><div id="bagiSaved" style="font-size:12px;margin-top:6px"></div><div style="background:#fef3c7;padding:8px;border-radius:10px;margin-top:8px;font-size:12px"><b>🤖 AI Konsul</b><div id="konsulBox">-</div></div></div></div><div id="tabTanya" class="tab"><div class="card"><b>🛒 Tanya Beli Level 1-5</b><input id="tanyaQ" class="inp" placeholder="Mau beli apa?"><input id="tanyaHarga" class="inp" type="number" placeholder="Harga"><input id="tanyaAlasan" class="inp" placeholder="Alasan"><select id="tanyaL" class="inp"><option value="1">1 Butuh Banget</option><option value="2">2 Butuh</option><option value="3">3 Lumayan</option><option value="4">4 Pengen</option><option value="5">5 Nafsu</option></select><button class="btn btnP" style="width:100%" onclick="cekTanya()">Cek Boleh?</button><div id="tanyaAns" style="font-size:12px;margin-top:6px"></div></div></div>
 <div id="tabSetting" class="tab"><div class="card"><b>👥 Akun / Kamar</b><div id="accList"></div><div style="display:flex;gap:6px"><button class="btn btnP" style="flex:1" onclick="logoutAcc()">Logout / Ganti Akun</button></div><div style="font-size:11px;margin-top:6px">Pindah kamar = narik dari cloud kamar itu. Jangan buat kamar baru kalau belum sync.</div></div><div class="card"><b>☁️ Cloud</b><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn btnP" style="flex:1" onclick="syncFromFirebase(true)">Tarik dari Cloud</button><button class="btn btnG" style="flex:1" onclick="syncToFirebase()">Kirim ke Cloud</button></div><div style="font-size:11px;margin-top:6px">Kalau saldo masih salah, klik Tarik dari Cloud 1x, tunggu sampai Sudah Sync.</div></div><div class="card"><b>💾 Data</b><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn btnG" onclick="exportJSON()">Export JSON</button><button class="btn btnG" onclick="window.print()">🖨️ Print</button></div><div style="font-size:11px;margin-top:8px">ID: <span id="roomId2">-</span> • <span id="fbStat">-</span><br>JANGAN pakai Reset / Clear, itu yang hapus semua kemarin.</div></div></div>
 <button class="fab" onclick="openForm()">+</button>
-<div id="mForm" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:50;align-items:end"><div style="background:#fff;width:100%;border-radius:18px 18px 0 0;padding:14px"><h3 id="fTitle">Tambah</h3><select id="fCat" class="inp"></select><input id="fAmt" class="inp" type="number" placeholder="Jumlah"><select id="fWallet" class="inp"></select><select id="fType" class="inp" onchange="onType()"><option value="keluar">Keluar</option><option value="masuk">Masuk</option><option value="pindah">Pindah Dompet</option><option value="nabung">Nabung (link Target)</option><option value="hutang">Bayar Hutang (link)</option><option value="tagihan">Bayar Tagihan (link)</option></select><select id="fWallet2" class="inp" style="display:none"></select><select id="fLink" class="inp" style="display:none"></select><div style="display:flex;gap:6px"><button class="btn btnP" style="flex:1" onclick="saveTx()">Simpan</button><button class="btn btnG" style="flex:1" onclick="closeForm()">Batal</button></div><div id="fAct" style="display:none;margin-top:6px"><button class="btn" style="width:100%;background:#fee2e2;color:#dc2626" onclick="delTx()">Hapus</button></div></div></div>
+<div id="mForm" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:50;align-items:end"><div style="background:#fff;width:100%;border-radius:18px 18px 0 0;padding:14px"><h3 id="fTitle">Tambah</h3><select id="fCat" class="inp"></select><input id="fAmt" class="inp" type="number" placeholder="Jumlah"><input id="fKet" class="inp" placeholder="Keterangan: misal makan siang warteg / bensin ke Purbalingga"><select id="fWallet" class="inp"></select><select id="fType" class="inp" onchange="onType()"><option value="keluar">Keluar</option><option value="masuk">Masuk</option><option value="pindah">Pindah Dompet</option><option value="nabung">Nabung (link Target)</option><option value="hutang">Bayar Hutang (link)</option><option value="tagihan">Bayar Tagihan (link)</option></select><select id="fWallet2" class="inp" style="display:none"></select><select id="fLink" class="inp" style="display:none"></select><div style="display:flex;gap:6px"><button class="btn btnP" style="flex:1" onclick="saveTx()">Simpan</button><button class="btn btnG" style="flex:1" onclick="closeForm()">Batal</button></div><div id="fAct" style="display:none;margin-top:6px"><button class="btn" style="width:100%;background:#fee2e2;color:#dc2626" onclick="delTx()">Hapus</button></div></div></div>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
@@ -453,7 +453,42 @@ function renderKonsul(){
   }catch(e){}
 }
 // === AKHIR BAGI GAJI BARU ===
-
+// === TRANSAKSI + KETERANGAN ===
+function openForm(){ editingId=null; $('fTitle').innerText='Tambah Transaksi'; $('fAmt').value=''; if($('fKet')) $('fKet').value=''; $('fLink').style.display='none'; $('fWallet2').style.display='none'; $('fAct').style.display='none'; $('mForm').style.display='flex'; renderCats(); }
+function editTx(id){
+  var t=null; for(var i=0;i<txs.length;i++){ if(String(txs[i].id)==String(id)){ t=txs[i]; break; } }
+  if(!t) return;
+  editingId=id; $('fTitle').innerText='Edit'; $('fAmt').value=t.amount; if($('fKet')) $('fKet').value=t.ket||''; $('fWallet').value=t.wallet; $('fType').value=t.type; $('fAct').style.display='block'; $('mForm').style.display='flex'; onType();
+}
+function saveTx(){
+  try{
+    var cat=$('fCat').value||'Lain', amt=Number($('fAmt').value||0), wal=$('fWallet').value, type=$('fType').value, wal2=$('fWallet2').value, link=$('fLink').value||'', ket=$('fKet')?$('fKet').value.trim():'';
+    if(wal=='__new'){ wal=prompt('Nama dompet baru:','Cash'); if(!wal) return; wallets.push({name:wal}); saveLocalOnly(); }
+    if(!amt) return alert('Isi jumlah');
+    var oldT=null; if(editingId){ for(var i=0;i<txs.length;i++){ if(String(txs[i].id)==String(editingId)){ oldT=txs[i]; break; } } }
+    var d={id:editingId||('L'+Date.now()),cat:cat,amount:amt,wallet:wal,type:type,wallet2:wal2,link:link,ket:ket,t:oldT?oldT.t:Date.now()};
+    if(link){ var p=link.split(':'); if(p[0]=='nabung'){ var nb=null; for(var j=0;j<nabungs.length;j++){ if(String(nabungs[j].id)==p[1]){ nb=nabungs[j]; break; } } if(nb){ nb.have=Number(nb.have||0)+amt; syncOne('nabung',nb.id,nb); } } if(p[0]=='hutang'){ var hg=null; for(var k=0;k<hutangs.length;k++){ if(String(hutangs[k].id)==p[1]){ hg=hutangs[k]; break; } } if(hg){ hg.sisa=Math.max(0,Number(hg.sisa||0)-amt); if(hg.sisa===0){ alert('Hutang LUNAS!'); hutangs=hutangs.filter(function(n){ return String(n.id)!=p[1]; }); syncOne('hutang',hg.id,null,true); } else syncOne('hutang',hg.id,hg); renderHutang(); } } if(p[0]=='tagihan'){ var tg=null; for(var m=0;m<tagihans.length;m++){ if(String(tagihans[m].id)==p[1]){ tg=tagihans[m]; break; } } if(tg){ tg.status='Terbayar'; syncOne('tagihan',tg.id,tg); renderTagihan(); } } }
+    if(editingId){ var idx=-1; for(var n=0;n<txs.length;n++){ if(String(txs[n].id)==String(editingId)){ idx=n; break; } } if(idx>=0) txs[idx]=d; else txs.unshift(d); } else { txs.unshift(d); }
+    saveLocalOnly(); syncOne('tx',d.id,d); closeForm(); render();
+  }catch(e){ alert('Gagal simpan: '+e.message); }
+}
+// Biar keterangan muncul di log, timpa tampilan list-nya setelah render jalan
+(function(){
+  var _oldR = render;
+  render = function(){
+    _oldR();
+    try{
+      var h='';
+      if(txs.length==0){ return; }
+      txs.slice(0,100).forEach(function(t){
+        var ket = t.ket ? '<div style="font-size:11px;opacity:.7">📝 '+t.ket+'</div>' : '';
+        h+='<div class="tx" onclick="editTx(\''+t.id+'\')"><div><b>'+t.cat+'</b>'+ket+'<div style="font-size:11px;opacity:.6">'+(t.wallet||'')+' • '+(new Date(t.t||Date.now()).toLocaleDateString('id-ID'))+'</div></div><div style="color:'+(t.type=='masuk'?'#16a34a':'#dc2626')+'">'+(t.type=='masuk'?'+':'-')+fmt(t.amount)+'</div></div>';
+      });
+      $('list').innerHTML=h;
+    }catch(e){}
+  };
+})();
+// === AKHIR KETERANGAN ===
 render();
 </script>
 <div id="loginScreen" style="position:fixed;inset:0;background:#991b1b;z-index:100;display:flex;align-items:center;justify-content:center;padding:20px">
